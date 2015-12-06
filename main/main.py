@@ -30,16 +30,16 @@ def main():
     
     # Main Script.
     print("Fetching Data...", end = "")
-    guessPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
+    guestPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
     print("Completed")
     
     # Ensures that there is something to actually print.
-    if (len(guessPass) == 0):
+    if (len(guestPass) == 0):
         print("No Valid Guess Passes...Quitting")
         return
     
     print("Building Comment Text...", end = "")
-    commentText = buildCommentText(guessPass)
+    commentText = buildCommentText(guestPass)
     print("Completed")
     
     print("Posting to Reddit...", end = "")
@@ -62,7 +62,7 @@ def crunchyDataFetch(username, password):
     VALID_KEY_OFFSET = 2
     
     # List to be returned. Will hold all valid guess passes.
-    validGuessPass = []
+    validGuestPass = []
     driver = webdriver.PhantomJS()
     driver.get("https://www.crunchyroll.com/login?next=%2F")
     
@@ -86,15 +86,15 @@ def crunchyDataFetch(username, password):
         for k in range(len(cellList)):
             cell = cellList[k]
             if (cell.text == "Valid"):
-                validGuessPass.append(cellList[k - VALID_KEY_OFFSET].text)
+                validGuestPass.append(cellList[k - VALID_KEY_OFFSET].text)
     
     # Close the Driver.
     driver.quit()
-    return validGuessPass
+    return validGuestPass
 
 def redditPost(username, password, commentText):
     """
-        Post Guess Passes to Reddit on given user account.
+        Post Guest Passes to Reddit on given user account.
         
         Arguments:
             username: String of the Reddit Account username to login to
@@ -102,29 +102,29 @@ def redditPost(username, password, commentText):
             commentText: Reddit formatted String to post.
     """
     # Key words to look for.
-    searchList = ["weekly", "guess", "pass", "megathread"]
+    searchList = ["weekly", "guest", "pass", "megathread"]
     
     # Bot login.
     bot = praw.Reddit("Post CrunchRoll GuestPasses when script is called.")
     bot.login(username, password, disable_warning = True)
     subreddit = bot.get_subreddit("Crunchyroll")
     
-    # Find weekly guess pass submission.
+    # Find weekly guest pass submission.
     for submission in subreddit.get_hot(limit = 10):
         submissionText = submission.title.lower()
         hasSearch = any(string in submissionText for string in searchList)
         if (hasSearch):
             submission.add_comment(commentText)
             
-def buildCommentText(guessPass):
+def buildCommentText(guestPass):
     """
         Generates a Reddit formatted text to display the code.
         
         Arguments:
-            guessPass: List of valid guess passes in String form
+            guestPass: List of valid guest passes in String form
     """
     text = "Here are some valid passes:  \n\n"
-    for gPass in guessPass:
+    for gPass in guestPass:
         passCode  = " * " + gPass + "\n"
         text += passCode
         
