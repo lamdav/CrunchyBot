@@ -9,10 +9,17 @@ def main():
     redditUsername = input("Reddit Username: ")
     redditPassword = getpass.getpass("Reddit Password: ")
     
-    # Main.
+    # Main Script.
+    print("Fetching Data...", end = "")
     guessPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
+    print("Completed")
+    print("Building Comment Text...", end = "")
     commentText = buildCommentText(guessPass)
+    print("Completed")
+    print("Posting to Reddit...", end = "")
     redditPost(redditUsername, redditPassword, commentText)
+    print("Completed")
+    print("All Processes Completed.")
     
 def crunchyDataFetch(username, password):
     """
@@ -25,6 +32,7 @@ def crunchyDataFetch(username, password):
     # Constants.
     PASSWORD_INPUT_INDEX = 1
     SUBMIT_INDEX = 1
+    VALID_KEY_OFFSET = 2
     
     # List to be returned. Will hold all valid guess passes.
     validGuessPass = []
@@ -51,8 +59,7 @@ def crunchyDataFetch(username, password):
         for k in range(len(cellList)):
             cell = cellList[k]
             if (cell.text == "Valid"):
-                print("valid key: ", cellList[k - 2].text)
-                validGuessPass.append(cellList[k - 2].text)
+                validGuessPass.append(cellList[k - VALID_KEY_OFFSET].text)
     
     # Close the Driver.
     driver.quit()
@@ -71,8 +78,8 @@ def redditPost(username, password, commentText):
     searchList = ["weekly", "guess", "pass", "megathread"]
     
     # Bot login.
-    bot = praw.Reddit("Post CrunchRoll GuestPasses at regular intervals")
-    bot.login(username, password)
+    bot = praw.Reddit("Post CrunchRoll GuestPasses when script is called.")
+    bot.login(username, password, disable_warning = True)
     subreddit = bot.get_subreddit("Crunchyroll")
     
     # Find weekly guess pass submission.
@@ -93,8 +100,9 @@ def buildCommentText(guessPass):
     for gPass in guessPass:
         passCode  = " * " + gPass + "\n"
         text += passCode
+        
+    text += "  \n*Disclaimer: This is a bot. Here is a [link](https://github.com/lamdaV/CrunchyBot/tree/master) for more detail.*"
     return text
-                
-main()
-    
-    
+
+if __name__ == "__main__":
+    main()
