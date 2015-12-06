@@ -3,22 +3,49 @@ import praw
 import getpass
 
 def main():
+    # Constants (for automated use).
+#     CRUNCHY_USER_INDEX = 0
+#     CRUNCHY_PASS_INDEX = 1
+#     REDDIT_USER_INDEX = 2
+#     REDDIT_PASS_INDEX = 3
+    
+    # Get data from text file (for automated use).
+#     print("Fetching Account Data...", end = "")
+#     accountDataFile = open("botData.txt", "r")
+#     accountData = accountDataFile.read().split("\n")
+#     accountDataFile.close()
+#     print("Completed")
+    
     # Grab account data.
     crunchyUsername = input("CrunchyRoll Username: ")
     crunchyPassword = getpass.getpass("CrunchyRoll Password: ")
     redditUsername = input("Reddit Username: ")
     redditPassword = getpass.getpass("Reddit Password: ")
     
+    # For automated use.
+#     crunchyUsername = accountData[CRUNCHY_USER_INDEX]
+#     crunchyPassword = accountData[CRUNCHY_PASS_INDEX]
+#     redditUsername = accountData[REDDIT_USER_INDEX]
+#     redditPassword = accountData[REDDIT_PASS_INDEX]
+    
     # Main Script.
     print("Fetching Data...", end = "")
     guessPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
     print("Completed")
+    
+    # Ensures that there is something to actually print.
+    if (len(guessPass) == 0):
+        print("No Valid Guess Passes...Quitting")
+        return
+    
     print("Building Comment Text...", end = "")
     commentText = buildCommentText(guessPass)
     print("Completed")
+    
     print("Posting to Reddit...", end = "")
     redditPost(redditUsername, redditPassword, commentText)
     print("Completed")
+    
     print("All Processes Completed.")
     
 def crunchyDataFetch(username, password):
