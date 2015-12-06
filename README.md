@@ -18,7 +18,7 @@ Either run this within an IDE environment and provide the data the console ask f
 **Note:** You will not see anything as you type your password. This is an intended effect to hide your data. Key strokes are still being read; however, there will be no visual feedback.  
 
 # Automating:
-As previously stated, this was intended for use with Windows Task Scheduler. To set it up, you need to edit the Python files (I chose not to do this for everyone as some may choose to manually do this instead) and have it read from a text file with your account data on it. For example: assuming you have your data in `botData.txt` located where `main.py` is
+As previously stated, this was intended for use with Windows Task Scheduler. To set it up, you need to edit the Python files (the sample code below is in the comments) and have it read from a text file with your account data on it. For example: assuming you have your data in `botData.txt` located where `main.py` is
 ```
   accountDataFile = open("botData.txt", "r")
   accountData = accountDataFile.read().split("\n")
