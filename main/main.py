@@ -77,8 +77,8 @@ def crunchyDataFetch(username, password):
     driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
     
     # Grabs HTML data.
-    guessPassTable = driver.find_element_by_class_name("acct-guestpass-tl")
-    rowList = guessPassTable.find_elements_by_tag_name("tr")
+    guestPassTable = driver.find_element_by_class_name("acct-guestpass-tl")
+    rowList = guestPassTable.find_elements_by_tag_name("tr")
     
     # Parse HTML data
     for row in rowList:
@@ -102,7 +102,7 @@ def redditPost(username, password, commentText):
             commentText: Reddit formatted String to post.
     """
     # Key words to look for.
-    searchList = ["weekly", "guest", "pass", "megathread"]
+    searchList = ["weekly", "guess", "pass", "megathread"]
     
     # Bot login.
     bot = praw.Reddit("Post CrunchRoll GuestPasses when script is called.")
@@ -112,7 +112,7 @@ def redditPost(username, password, commentText):
     # Find weekly guest pass submission.
     for submission in subreddit.get_hot(limit = 10):
         submissionText = submission.title.lower()
-        hasSearch = any(string in submissionText for string in searchList)
+        hasSearch = all(string in submissionText for string in searchList)
         if (hasSearch):
             submission.add_comment(commentText)
             
