@@ -1,6 +1,6 @@
 # CrunchyBot  
 # Description:
-This is a simple bot I made to publish my CrunchyRoll Guess Passes to Reddit. It uses Selenium and PhantomJS to extract the valid guess passes from CrunchyRoll and PRAW to publish it /r/Crunchyroll's weekly Megathread. This is not a bot made to run indefinitely. It was intended for use in conjunction with a task scheduler to check once every month for new guess passes.
+This is a simple bot I made to publish my CrunchyRoll Guest Passes to Reddit. It uses Selenium and PhantomJS to extract the valid guest passes from CrunchyRoll and PRAW to publish it /r/Crunchyroll's weekly Megathread. This is not a bot made to run indefinitely. It was intended for use in conjunction with a task scheduler to check once every month for new guest passes.
   
 # Requirement:
 Selenium  
