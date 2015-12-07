@@ -1,6 +1,9 @@
 from selenium import webdriver
 import praw
 import getpass
+from selenium.selenium import selenium
+from selenium.common.exceptions import NoSuchElementException
+from praw.errors import InvalidUserPass
 
 def main():
     # Constants (for automated use).
@@ -30,36 +33,47 @@ def main():
     
     # Main Script.
     print("Fetching Data...", end = "")
-    guestPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
+    try:
+        guestPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
+    except (NoSuchElementException):
+        print("Error\nUnable to obtain Guest Passes. Please check your CrunchyRoll username and password.")
+        return
     print("Completed")
-    
+     
     # Ensures that there is something to actually print.
     if (len(guestPass) == 0):
-        print("No Valid Guess Passes...Quitting")
+        print("No Valid Guest Passes...Quitting")
         return
-    
+     
     print("Building Comment Text...", end = "")
     commentText = buildCommentText(guestPass)
     print("Completed")
     
     print("Posting to Reddit...", end = "")
-    redditPost(redditUsername, redditPassword, commentText)
+    try:
+        redditPost(redditUsername, redditPassword, commentText)
+    except(InvalidUserPass):
+        print("Error\nUnable to login to Reddit. Please check your Reddit username and password.")
+        return
     print("Completed")
     
     print("All Processes Completed.")
     
 def crunchyDataFetch(username, password):
     """
-        Fetch Guess Passes from given CrunchyRoll Account.
+        Fetch Guest Passes from given CrunchyRoll Account.
         
         Arguments:
             username: String of the CrunchyRoll username to login to
             password: String of the CrunchyRoll password to login to
+        
+        Returns a list of Guest Passes as Strings.
     """
     # Constants.
     PASSWORD_INPUT_INDEX = 1
     SUBMIT_INDEX = 1
     VALID_KEY_OFFSET = 2
+    GUEST_PASS_TABLE_INDEX = 0
     
     # List to be returned. Will hold all valid guess passes.
     validGuestPass = []
@@ -77,10 +91,15 @@ def crunchyDataFetch(username, password):
     driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
     
     # Grabs HTML data.
-    guestPassTable = driver.find_element_by_class_name("acct-guestpass-tl")
-    rowList = guestPassTable.find_elements_by_tag_name("tr")
+    guestPassTables = driver.find_elements_by_class_name("acct-guestpass-tl")
     
-    # Parse HTML data
+    # Ensure user was able to login.
+    if (not guestPassTables):
+        raise(NoSuchElementException)
+    
+    rowList = guestPassTables[GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name("tr")
+    
+    # Parse HTML table data.
     for row in rowList:
         cellList = row.find_elements_by_tag_name("td")
         for k in range(len(cellList)):
@@ -100,6 +119,8 @@ def redditPost(username, password, commentText):
             username: String of the Reddit Account username to login to
             password: String of the Reddit ACcount password to login to
             commentText: Reddit formatted String to post.
+            
+        Returns nothing.
     """
     # Key words to look for.
     searchList = ["weekly", "guess", "pass", "megathread"]
@@ -122,6 +143,8 @@ def buildCommentText(guestPass):
         
         Arguments:
             guestPass: List of valid guest passes in String form
+            
+        Returns a String that has been formatted for Reddit submission.
     """
     text = "Here are some valid passes:  \n\n"
     for gPass in guestPass:
