@@ -80,7 +80,7 @@ def crunchyDataFetch(username, password):
 
     # List to be returned. Will hold all valid guess passes.
     validGuestPass = []
-    driver = webdriver.PhantomJS()
+    driver = webdriver.PhantomJS("./phantomjs.exe")
     driver.get("https://www.crunchyroll.com/login?next=%2F")
 
     # Login to CrunchyRoll
