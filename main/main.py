@@ -78,7 +78,7 @@ def crunchyDataFetch(username, password):
     VALID_KEY_OFFSET = 2
     GUEST_PASS_TABLE_INDEX = 0
 
-    # List to be returned. Will hold all valid guess passes.
+    # List to be returned. Will hold all valid guest passes.
     validGuestPass = []
     driver = webdriver.PhantomJS("./phantomjs.exe")
     driver.get("https://www.crunchyroll.com/login?next=%2F")
@@ -89,8 +89,9 @@ def crunchyDataFetch(username, password):
     passwordField.send_keys(password)
     passwordField.send_keys(Keys.ENTER)
 
-    # Navigate to Guess Pass page.
+    # Navigate to the last page of the Guest Pass page.~
     driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
+    driver.find_element_by_link_text("Last").click()
 
     # Grabs HTML data.
     guestPassTables = driver.find_elements_by_class_name("acct-guestpass-tl")
