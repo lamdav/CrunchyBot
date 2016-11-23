@@ -12,7 +12,7 @@ def main():
     if (len(sys.argv) != 2):
         print("[ ERROR ] missing parameters")
         print("CrunchyBot.py <data.txt>")
-        return
+        sys.exit()
 
     # Make directory for logs and images if necessary.
     if (not os.path.isdir("../logs/")):
@@ -49,13 +49,14 @@ def main():
         guestPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
     except (NoSuchElementException):
         print("Error\nUnable to obtain Guest Passes. Please check your CrunchyRoll username and password.")
-        return
+        sys.exit()
+
     print("Completed")
 
     # Ensures that there is something to actually print.
     if (len(guestPass) == 0):
         print("No Valid Guest Passes...Quitting")
-        return
+        sys.exit()
 
     print("Building Comment Text...", end="")
     commentText = buildCommentText(guestPass)
@@ -73,7 +74,7 @@ def main():
     except(InvalidUserPass):
         print("Error\nUnable to login to Reddit. Please check your Reddit username and password.")
         driver.close()
-        return
+        sys.exit()
 
     print("All Processes Completed.")
 
