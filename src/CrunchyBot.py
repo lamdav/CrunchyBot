@@ -11,7 +11,7 @@ from praw.errors import InvalidUserPass
 def main():
     if (len(sys.argv) != 2):
         print("[ ERROR ] missing parameters")
-        print("python CrunchyBot.py {data.txt}")
+        print("CrunchyBot.py <data.txt>")
         return
 
     # Make directory for logs and images if necessary.
