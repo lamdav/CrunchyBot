@@ -99,4 +99,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-main/botData.txt
+*/myData.txt

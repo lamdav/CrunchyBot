@@ -1,0 +1,5 @@
+# main\main.py: 2,6
+praw == 3.5.0
+
+# main\main.py: 1,4,5
+selenium == 3.0.0
