@@ -2,15 +2,21 @@ from selenium import webdriver
 import praw
 import getpass
 import sys
+import os
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from praw.errors import InvalidUserPass
+
 
 def main():
     if (len(sys.argv) != 2):
         print("[ ERROR ] missing parameters")
         print("python CrunchyBot.py {data.txt}")
         return
+
+    # Make directory for logs and images if necessary.
+    if (not os.path.isdir("../logs/")):
+        os.makedirs("../logs/")
 
     # Constants (for automated use).
     CRUNCHY_USER_INDEX = 0
@@ -19,13 +25,13 @@ def main():
     REDDIT_PASS_INDEX = 3
 
     # Get data from text file (for automated use).
-    print("Fetching Account Data...", end = "")
+    print("Fetching Account Data...", end="")
     accountDataFile = open(sys.argv[1], "r")
     accountData = accountDataFile.read().split("\n")
     accountDataFile.close()
     print("Completed")
 
-    # Grab account data.
+    # Grab account data (for non-automated use).
 #     crunchyUsername = input("CrunchyRoll Username: ")
 #     crunchyPassword = getpass.getpass("CrunchyRoll Password: ")
 #     redditUsername = input("Reddit Username: ")
@@ -38,7 +44,7 @@ def main():
     redditPassword = accountData[REDDIT_PASS_INDEX]
 
     # Main Script.
-    print("Fetching Data...", end = "")
+    print("Fetching Data...", end="")
     try:
         guestPass = crunchyDataFetch(crunchyUsername, crunchyPassword)
     except (NoSuchElementException):
@@ -51,13 +57,14 @@ def main():
         print("No Valid Guest Passes...Quitting")
         return
 
-    print("Building Comment Text...", end = "")
+    print("Building Comment Text...", end="")
     commentText = buildCommentText(guestPass)
     print("Completed")
 
-    print("Posting to Reddit...", end = "")
+    print("Posting to Reddit...", end="")
     try:
-        submissionStatus = redditPost(redditUsername, redditPassword, commentText)
+        submissionStatus = redditPost(
+            redditUsername, redditPassword, commentText)
 
         if (submissionStatus):
             print("Completed")
@@ -69,6 +76,7 @@ def main():
         return
 
     print("All Processes Completed.")
+
 
 def crunchyDataFetch(username, password):
     """
@@ -86,7 +94,8 @@ def crunchyDataFetch(username, password):
 
     # List to be returned. Will hold all valid guest passes.
     validGuestPass = []
-    driver = webdriver.PhantomJS("./phantomjs.exe")
+    driver = webdriver.PhantomJS(
+        "./phantomjs.exe", service_log_path="../logs/phantom.log")
     driver.get("https://www.crunchyroll.com/login?next=%2F")
 
     # Login to CrunchyRoll
@@ -106,7 +115,8 @@ def crunchyDataFetch(username, password):
     if (not guestPassTables):
         raise(NoSuchElementException)
 
-    rowList = guestPassTables[GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name("tr")
+    rowList = guestPassTables[
+        GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name("tr")
 
     # Parse HTML table data.
     for row in rowList:
@@ -119,6 +129,7 @@ def crunchyDataFetch(username, password):
     # Close the Driver.
     driver.quit()
     return validGuestPass
+
 
 def redditPost(username, password, commentText):
     """
@@ -139,11 +150,11 @@ def redditPost(username, password, commentText):
 
     # Bot login.
     bot = praw.Reddit("Post CrunchRoll GuestPasses when script is called.")
-    bot.login(username, password, disable_warning = True)
+    bot.login(username, password, disable_warning=True)
     subreddit = bot.get_subreddit("Crunchyroll")
 
     # Find weekly guest pass submission.
-    for submission in subreddit.get_hot(limit = 10):
+    for submission in subreddit.get_hot(limit=10):
         submissionText = submission.title.lower()
         hasSearch = all(string in submissionText for string in searchList)
         if (hasSearch):
@@ -152,6 +163,7 @@ def redditPost(username, password, commentText):
             break
 
     return submissionStatus
+
 
 def buildCommentText(guestPass):
     """
@@ -164,7 +176,7 @@ def buildCommentText(guestPass):
     """
     text = "Here are some valid passes:  \n\n"
     for gPass in guestPass:
-        passCode  = " * " + gPass + "\n"
+        passCode = " * " + gPass + "\n"
         text += passCode
 
     text += "  \n*Disclaimer: This is a bot. Here is a [link](https://github.com/lamdaV/CrunchyBot/tree/master) for more detail.*"
