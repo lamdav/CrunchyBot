@@ -182,5 +182,6 @@ def buildCommentText(guestPass):
     text += "  \n*Disclaimer: This is a bot. Here is a [link](https://github.com/lamdaV/CrunchyBot/tree/master) for more detail.*"
     return text
 
+
 if __name__ == "__main__":
     main()
