@@ -15,7 +15,7 @@ Install PRAW and Selenium by running the following command:
 
 ## How to Use:
   1. Navigate to where CrunchyBot.py is located in your local repository in the command line.
-    * **Note:** Execute the script in the source directory. Otherwise, the script will complain about not finding `phantomjs.exe` file.
+    * **Note:** Execute the script in the `src` directory. Otherwise, the script will complain about not finding `phantomjs.exe` file.
   2. Run `$ python CrunchyBot.py /path/to/botData.txt`
 
 ## Automating:
