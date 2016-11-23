@@ -14,7 +14,7 @@ def main():
         print("CrunchyBot.py <data.txt>")
         sys.exit()
 
-    # Make directory for logs and images if necessary.
+    # Make directory for logs if necessary.
     if (not os.path.isdir("../logs/")):
         os.makedirs("../logs/")
 
