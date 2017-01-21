@@ -1,4 +1,7 @@
 crunchyUser
 crunchyPass
+redditClientID
+redditClientSecret
+redditUserAgent
 redditUser
 redditPass
