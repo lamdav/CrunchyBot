@@ -86,8 +86,9 @@ def crunchy_data_fetch(username, password):
     valid_guest_pass = []
     driver = webdriver.PhantomJS(
         "./phantomjs.exe", service_log_path="../logs/phantom.log")
-    driver = webdriver.Chrome("./chromedriver.exe",
-                              service_log_path="../logs/chrome.log")
+    # Uncomment the line below to run with Chromedrive. Be sure to comment the above line if so.
+    # driver = webdriver.Chrome("./chromedriver.exe",
+    #                           service_log_path="../logs/chrome.log")
     driver.get("https://www.crunchyroll.com/login?next=%2F")
 
     # Login to CrunchyRoll
