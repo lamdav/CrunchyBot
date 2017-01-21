@@ -3,8 +3,12 @@ import praw
 import getpass
 import sys
 import os
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from praw.errors import InvalidUserPass
 
 
@@ -100,15 +104,26 @@ def crunchyDataFetch(username, password):
     driver.get("https://www.crunchyroll.com/login?next=%2F")
 
     # Login to CrunchyRoll
-    driver.find_element_by_id("login_form_name").send_keys(username)
-    passwordField = driver.find_element_by_id("login_form_password")
-    passwordField.send_keys(password)
-    passwordField.send_keys(Keys.ENTER)
+    try:
+        # Since CloudFlare stalls the login page, this is to wait the estimated 5 seconds (10 seconds to be sure) for CloudFlare to approve of browser.
+        usernameField = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "login_form_name")))
+        usernameField.send_keys(username)
+        passwordField = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "login_form_password")))
+        passwordField.send_keys(password)
+        passwordField.send_keys(Keys.ENTER)
+    except (TimeoutException):
+        driver.quit()
+        raise(TimeoutException)
 
     # Navigate to the last page of the Guest Pass page.~
     driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
-    driver.find_element_by_link_text("Last").click()
-
+    try:
+        last = driver.find_element_by_link_text("Last")
+        last.click()
+    except (NoSuchElementException):
+        # This means that user does not have a multipage guestpass table.
+        pass
+        
     # Grabs HTML data.
     guestPassTables = driver.find_elements_by_class_name("acct-guestpass-tl")
 
@@ -127,8 +142,9 @@ def crunchyDataFetch(username, password):
             if (cell.text == "Valid"):
                 validGuestPass.append(cellList[k - VALID_KEY_OFFSET].text)
 
-    # Close the Driver.
-    driver.quit()
+    # Close the driver.
+    driver.close()
+
     return validGuestPass
 
 

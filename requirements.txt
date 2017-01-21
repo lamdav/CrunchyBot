@@ -1,5 +1,5 @@
-# main\main.py: 2,6
-praw == 3.5.0
+# src\CrunchyBot.py: 2,12
+praw == 4.3.0
 
-# main\main.py: 1,4,5
+# src\CrunchyBot.py: 6,7,8,9,10
 selenium == 3.0.0
