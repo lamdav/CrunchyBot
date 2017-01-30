@@ -189,7 +189,7 @@ def reddit_post(client_id, client_secret, user_agent, username, password, commen
     subreddit = bot.subreddit('Crunchyroll')
 
     # Find weekly guest pass submission.
-    for submission in subreddit.hot(limit=10):
+    for submission in subreddit.hot(limit=100):
         submissionText = submission.title.lower()
         hasSearch = all(string in submissionText for string in searchList)
         if (hasSearch):
@@ -232,7 +232,8 @@ def main():
     print("Posting to Reddit...", end="")
     try:
         submission_status = reddit_post(
-            data_dictionary["client_id"], data_dictionary["client_secret"], data_dictionary["reddit_user_agent"], data_dictionary["reddit_username"], data_dictionary["reddit_password"])
+            data_dictionary["reddit_client_id"], data_dictionary["reddit_client_secret"], data_dictionary["reddit_user_agent"],
+            data_dictionary["reddit_username"], data_dictionary["reddit_password"], comment_text)
 
         if (submission_status):
             print("Completed")
