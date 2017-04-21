@@ -1,6 +1,6 @@
 # CrunchyBot
 ## Description:
-This is a simple bot I made to publish my CrunchyRoll Guest Passes to Reddit. It uses Selenium and PhantomJS to extract the valid guest passes from CrunchyRoll and PRAW to publish it /r/Crunchyroll's weekly Megathread. This is not a bot made to run indefinitely; however, it can be altered to do so if one so desried. It was intended for use in conjunction with a task scheduler to check once every month (or four if you wish to publish them in sets before guest passes expire) for new guest passes.
+This is a simple bot I made to publish my CrunchyRoll Guest Passes to Reddit. It uses Selenium and PhantomJS to extract the valid guest passes from CrunchyRoll and PRAW to publish it /r/Crunchyroll's weekly Megathread. This is not a bot made to run indefinitely; however, it can be altered to do so if one so desired. It was intended for use in conjunction with a task scheduler to check once every month (or four if you wish to publish them in sets before guest passes expire) for new guest passes.
 
 ## Changes:
 Due to how the PRAW library has changed, all users now must create a [reddit script app](https://github.com/reddit/reddit/wiki/OAuth2). As such, the data file now must include additional data. See below for a quick guide on how to set this up.
