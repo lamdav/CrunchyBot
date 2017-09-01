@@ -84,8 +84,14 @@ def crunchy_data_fetch(username, password):
 
     # List to be returned. Will hold all valid guest passes.
     valid_guest_pass = []
+
+    # Determine the executable.
+    executable = "./phantomjs.exe"
+    if (sys.platform == "darwin"):
+        executable = "./phantomjs"
+
     driver = webdriver.PhantomJS(
-        "./phantomjs.exe", service_log_path="../logs/phantom.log")
+        executable, service_log_path="../logs/phantom.log")
     # Uncomment the line below to run with Chromedrive. Be sure to comment the above line if so.
     # driver = webdriver.Chrome("./chromedriver.exe",
     #                           service_log_path="../logs/chrome.log")
@@ -109,12 +115,13 @@ def crunchy_data_fetch(username, password):
 
     # Navigate to the last page of the Guest Pass page.~
     driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
-    try:
-        last = driver.find_element_by_link_text("Last")
-        last.click()
-    except (NoSuchElementException):
-        # This means that user does not have a multipage guest_pass table.
-        pass
+    # No longer needed; CrunchyRoll changed pass to descending order.
+    # try:
+    #     last = driver.find_element_by_link_text("Last")
+    #     last.click()
+    # except (NoSuchElementException):
+    #     # This means that user does not have a multipage guest_pass table.
+    #     pass
 
     # Grabs HTML data.
     guest_pass_tables = driver.find_elements_by_class_name("acct-guestpass-tl")
