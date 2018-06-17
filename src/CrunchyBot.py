@@ -102,16 +102,16 @@ def crunchy_data_fetch(username, password):
         # Since CloudFlare stalls the login page, this is to wait the estimated
         # 5 seconds (10 seconds to be sure) for CloudFlare to approve of
         # browser.
-        username_field = WebDriverWait(driver, 10).until(
+        username_field = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.ID, "login_form_name")))
         username_field.send_keys(username)
-        password_field = WebDriverWait(driver, 10).until(
+        password_field = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.ID, "login_form_password")))
         password_field.send_keys(password)
         password_field.send_keys(Keys.ENTER)
-    except (TimeoutException):
+    except TimeoutException:
         driver.quit()
-        raise(TimeoutException)
+        raise TimeoutException
 
     # Navigate to the last page of the Guest Pass page.~
     driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
