@@ -45,7 +45,7 @@ The other requirements are included in the `bin` directory of the project.
      ```
   2. Navigate to where you clone the repository
      ```
-        cd CruncyBot
+        cd CrunchyBot
      ```
   3. Update the templated `botData.txt` with your information.
   4. Run 
