@@ -99,6 +99,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-*/myData.txt
+
 /logs/
 */__init__.py

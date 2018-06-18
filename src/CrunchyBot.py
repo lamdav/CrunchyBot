@@ -1,14 +1,16 @@
-from selenium import webdriver
-import praw
 import argparse
-import sys
 import os
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import sys
+from pathlib import Path
+
+import praw
 from prawcore.exceptions import OAuthException
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 def parse_arguments():
@@ -17,6 +19,7 @@ def parse_arguments():
     """
     parser = argparse.ArgumentParser(description="Executes the CrunchyBot.")
     parser.add_argument("data", help="Path to data txt")
+    parser.add_argument("--debug", "-d", action="store_true")
     arguments = parser.parse_args()
     return arguments
 
@@ -26,8 +29,8 @@ def setup_log_directory():
         Setup the selenium webdriver log directory if needed.
     """
     # Make directory for logs if necessary.
-    if (not os.path.isdir("../logs/")):
-        os.makedirs("../logs/")
+    if not os.path.isdir("./logs/"):
+        os.makedirs("./logs/")
 
 
 def get_data(path):
@@ -50,31 +53,30 @@ def get_data(path):
 
     # Get data from text file (for automated use).
     print("Fetching Account Data...", end="")
-    data_file = open(path, "r")
-    account_data = data_file.read().split("\n")
-    data_file.close()
+    with open(path, "r") as data_file:
+        account_data = data_file.read().split("\n")
     print("Completed")
 
     # Grab relevant data and store it in the data_dictionary
-    data_dictionary = {}
-    data_dictionary["crunchy_username"] = account_data[CRUNCHY_USER_INDEX]
-    data_dictionary["crunchy_password"] = account_data[CRUNCHY_PASS_INDEX]
-    data_dictionary["reddit_client_id"] = account_data[CLIENT_ID_INDEX]
-    data_dictionary["reddit_client_secret"] = account_data[CLIENT_SECRET_INDEX]
-    data_dictionary["reddit_user_agent"] = account_data[USER_AGENT_INDEX]
-    data_dictionary["reddit_username"] = account_data[REDDIT_USER_INDEX]
-    data_dictionary["reddit_password"] = account_data[REDDIT_PASS_INDEX]
+    data_dictionary = {"crunchy_username": account_data[CRUNCHY_USER_INDEX],
+                       "crunchy_password": account_data[CRUNCHY_PASS_INDEX],
+                       "reddit_client_id": account_data[CLIENT_ID_INDEX],
+                       "reddit_client_secret": account_data[CLIENT_SECRET_INDEX],
+                       "reddit_user_agent": account_data[USER_AGENT_INDEX],
+                       "reddit_username": account_data[REDDIT_USER_INDEX],
+                       "reddit_password": account_data[REDDIT_PASS_INDEX]}
 
     return data_dictionary
 
 
-def crunchy_data_fetch(username, password):
+def crunchy_data_fetch(username, password, debug):
     """
         Fetch Guest Passes from given CrunchyRoll Account.
 
         Args:
             username:   String of the CrunchyRoll username to login to
             password:   String of the CrunchyRoll password to login to
+            debug:      Boolean used to dictate whether to use ChromeDriver or not.
         Returns:
             List of Guest Passes as Strings.
     """
@@ -86,27 +88,37 @@ def crunchy_data_fetch(username, password):
     valid_guest_pass = []
 
     # Determine the executable.
-    executable = "./phantomjs.exe"
-    if (sys.platform == "darwin"):
-        executable = "./phantomjs"
+    executable_path = Path("./bin")
+    if sys.platform == "darwin":
+        executable_path = executable_path.joinpath("osx")
+        if debug:
+            executable_path = executable_path.joinpath("chromedriver")
+        else:
+            executable_path = executable_path.joinpath("phantomjs")
+    else:
+        executable_path = executable_path.joinpath("windows")
+        if debug:
+            executable_path = executable_path.joinpath("chromedriver.exe")
+        else:
+            executable_path = executable_path.joinpath("phantomjs.exe")
 
-    driver = webdriver.PhantomJS(
-        executable, service_log_path="../logs/phantom.log")
-    # Uncomment the line below to run with Chromedrive. Be sure to comment the above line if so.
-    # driver = webdriver.Chrome("./chromedriver.exe",
-    #                           service_log_path="../logs/chrome.log")
+    if debug:
+        driver = webdriver.Chrome(executable_path.as_posix(),
+                                  service_log_path="./logs/chrome.log")
+    else:
+        driver = webdriver.PhantomJS(executable_path.as_posix(),
+                                     service_log_path="./logs/phantom.log")
     driver.get("https://www.crunchyroll.com/login?next=%2F")
 
     # Login to CrunchyRoll
     try:
         # Since CloudFlare stalls the login page, this is to wait the estimated
-        # 5 seconds (10 seconds to be sure) for CloudFlare to approve of
+        # 5 seconds (20 seconds to be sure) for CloudFlare to approve of
         # browser.
-        username_field = WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.ID, "login_form_name")))
+        username_field = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "login_form_name")))
         username_field.send_keys(username)
-        password_field = WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.ID, "login_form_password")))
+
+        password_field = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "login_form_password")))
         password_field.send_keys(password)
         password_field.send_keys(Keys.ENTER)
     except TimeoutException:
@@ -115,20 +127,13 @@ def crunchy_data_fetch(username, password):
 
     # Navigate to the last page of the Guest Pass page.~
     driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
-    # No longer needed; CrunchyRoll changed pass to descending order.
-    # try:
-    #     last = driver.find_element_by_link_text("Last")
-    #     last.click()
-    # except (NoSuchElementException):
-    #     # This means that user does not have a multipage guest_pass table.
-    #     pass
 
     # Grabs HTML data.
     guest_pass_tables = driver.find_elements_by_class_name("acct-guestpass-tl")
 
     # Ensure user was able to login.
-    if (not guest_pass_tables):
-        raise(NoSuchElementException)
+    if not guest_pass_tables:
+        raise NoSuchElementException
 
     row_list = guest_pass_tables[
         GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name("tr")
@@ -138,13 +143,42 @@ def crunchy_data_fetch(username, password):
         cell_list = row.find_elements_by_tag_name("td")
         for k in range(len(cell_list)):
             cell = cell_list[k]
-            if (cell.text == "Valid"):
+            if cell.text == "Valid":
                 valid_guest_pass.append(cell_list[k - VALID_KEY_OFFSET].text)
 
     # Close the driver.
     driver.close()
 
     return valid_guest_pass
+
+
+def fetch_guest_passes(data_dictionary, debug):
+    """
+    Fetch CrunchyRoll Guest Passes if any.
+
+    Args:
+        data_dictionary: Dictionary of credentials.
+        debug: Boolean dictating to use ChromeDriver for debugging purposes or not.
+
+    Returns:
+        List of Guest Passes.
+    """
+    print("Fetching Data...", end="")
+    try:
+        guest_passes = crunchy_data_fetch(data_dictionary["crunchy_username"],
+                                          data_dictionary["crunchy_password"],
+                                          debug)
+    except NoSuchElementException:
+        print("[ ERROR ]: Unable to obtain Guest Passes. Please check your CrunchyRoll credentials")
+        sys.exit(1)
+    print("Completed")
+
+    # Ensures that there is something to actually print.
+    if len(guest_passes) == 0:
+        print("No Valid Guest Passes...Quitting")
+        sys.exit(0)
+
+    return guest_passes
 
 
 def build_comment_text(guest_pass):
@@ -156,12 +190,17 @@ def build_comment_text(guest_pass):
         Returns:
             String that has been formatted for Reddit submission.
     """
+    print("Building Comment Text...", end="")
+
     text = "Here are some valid passes:  \n\n"
     for gPass in guest_pass:
         pass_code = " * " + gPass + "\n"
         text += pass_code
 
-    text += "  \n*Disclaimer: This is a bot. Here is a [link](https://github.com/lamdaV/CrunchyBot/tree/master) for more detail.*"
+    text += "  \n*Disclaimer: This is a bot. " \
+            "Here is a [link](https://github.com/lamdaV/CrunchyBot/tree/master) for more detail.*"
+
+    print("Completed")
     return text
 
 
@@ -175,7 +214,7 @@ def reddit_post(client_id, client_secret, user_agent, username, password, commen
             user_agent:      String of Reddit Account Script User Agent.
             username:        String of the Reddit Account username to login
                              to.
-            password:        String of the Reddit ACcount password to login
+            password:        String of the Reddit Account password to login
                              to.
             comment_text:    Reddit formatted String to post.
         Returns:
@@ -185,11 +224,14 @@ def reddit_post(client_id, client_secret, user_agent, username, password, commen
     submission_status = False
 
     # Key words to look for.
-    searchList = ["weekly", "guest", "pass", "megathread"]
+    search_list = ["weekly", "guest", "pass", "megathread"]
 
     # Bot login.
-    bot = praw.Reddit(client_id=client_id, client_secret=client_secret,
-                      user_agent=user_agent, username=username, password=password)
+    bot = praw.Reddit(client_id=client_id,
+                      client_secret=client_secret,
+                      user_agent=user_agent,
+                      username=username,
+                      password=password)
     print("Logged in as {0}...".format(bot.user.me()), end="")
 
     # Navigate to subreddit.
@@ -197,9 +239,9 @@ def reddit_post(client_id, client_secret, user_agent, username, password, commen
 
     # Find weekly guest pass submission.
     for submission in subreddit.hot(limit=100):
-        submissionText = submission.title.lower()
-        hasSearch = all(string in submissionText for string in searchList)
-        if (hasSearch):
+        submission_text = submission.title.lower()
+        has_search = all(string in submission_text for string in search_list)
+        if has_search:
             submission.reply(comment_text)
             submission_status = True
             break
@@ -207,49 +249,33 @@ def reddit_post(client_id, client_secret, user_agent, username, password, commen
     return submission_status
 
 
+def post_to_reddit(comment_text, data_dictionary):
+    print("Posting to Reddit...", end="")
+    try:
+        submission_status = reddit_post(data_dictionary["reddit_client_id"],
+                                        data_dictionary["reddit_client_secret"],
+                                        data_dictionary["reddit_user_agent"],
+                                        data_dictionary["reddit_username"],
+                                        data_dictionary["reddit_password"],
+                                        comment_text)
+
+        if submission_status:
+            print("Completed")
+        else:
+            print("Failed")
+    except OAuthException:
+        print("[ ERROR ]: Unable to login to Reddit. Please check your Reddit credentials")
+        sys.exit(1)
+
+
 def main():
     # Parse command line arguments and setup_log_directory logs directory.
     arguments = parse_arguments()
     setup_log_directory()
-
-    # Get data from file.
     data_dictionary = get_data(arguments.data)
-
-    # Fetch CrunchyRoll guest passes.
-    print("Fetching Data...", end="")
-    try:
-        guest_pass = crunchy_data_fetch(
-            data_dictionary["crunchy_username"], data_dictionary["crunchy_password"])
-    except (NoSuchElementException):
-        print("[ ERROR ]: Unable to obtain Guest Passes. Please check your CrunchyRoll username and password.")
-        sys.exit(1)
-    print("Completed")
-
-    # Ensures that there is something to actually print.
-    if (len(guest_pass) == 0):
-        print("No Valid Guest Passes...Quitting")
-        sys.exit(0)
-
-    # Build the Reddit Markdown comment.
-    print("Building Comment Text...", end="")
-    comment_text = build_comment_text(guest_pass)
-    print("Completed")
-
-    # Post it to reddit.
-    print("Posting to Reddit...", end="")
-    try:
-        submission_status = reddit_post(
-            data_dictionary["reddit_client_id"], data_dictionary["reddit_client_secret"], data_dictionary["reddit_user_agent"],
-            data_dictionary["reddit_username"], data_dictionary["reddit_password"], comment_text)
-
-        if (submission_status):
-            print("Completed")
-        else:
-            print("Failed")
-    except (OAuthException):
-        print(
-            "[ ERROR ]: Unable to login to Reddit. Please check your Reddit username and password.")
-        sys.exit(1)
+    guest_passes = fetch_guest_passes(data_dictionary, arguments.debug)
+    comment_text = build_comment_text(guest_passes)
+    post_to_reddit(comment_text, data_dictionary)
 
     print("All Processes Completed.")
     sys.exit(0)

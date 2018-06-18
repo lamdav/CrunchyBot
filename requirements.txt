@@ -8,4 +8,4 @@ praw == 5.4.0
 prawcore == 0.14.0
 
 # src/CrunchyBot.py: 6,7,8,9,10
-selenium == 3.0.0
+selenium == 3.12.0
