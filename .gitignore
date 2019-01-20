@@ -101,4 +101,4 @@ $RECYCLE.BIN/
 *.lnk
 
 /logs/
-*/__init__.py
+.vscode/
