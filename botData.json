@@ -1,0 +1,9 @@
+{
+  "crunchy_username": "crunchy_user",
+  "crunchy_password": "crunchy_pass",
+  "reddit_client_id": "client_id",
+  "reddit_client_secret": "client_secret",
+  "reddit_user_agent": "client_user_agent",
+  "reddit_username": "reddit_user",
+  "reddit_password": "reddit_pass"
+}

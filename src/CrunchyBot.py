@@ -1,11 +1,12 @@
 import argparse
-import os
+import json
 import sys
 from pathlib import Path
 
 import praw
 from prawcore.exceptions import OAuthException
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options  
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -16,6 +17,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 def parse_arguments():
     """
         Returns the arguments from the command line.
+
+        Returns:
+            arguments parsed from the command line.
     """
     parser = argparse.ArgumentParser(description="Executes the CrunchyBot.")
     parser.add_argument("data", help="Path to data txt")
@@ -23,14 +27,33 @@ def parse_arguments():
     arguments = parser.parse_args()
     return arguments
 
+def get_script_path():
+    """
+        Retrieve Path of this script.
+
+        Returns:
+            Path object to this script
+    """
+    return Path(__file__).resolve()
+
+def get_log_directory():
+    """
+        Retrieve log base directory
+
+        Returns:
+            Path object to the log directory
+    """
+    script_path = get_script_path()
+    return script_path.parent.parent.joinpath("logs")
 
 def setup_log_directory():
     """
         Setup the selenium webdriver log directory if needed.
     """
     # Make directory for logs if necessary.
-    if not os.path.isdir("./logs/"):
-        os.makedirs("./logs/")
+    logs_path = get_log_directory()
+    if not logs_path.exists():
+        logs_path.mkdir(parents=True, exists_ok=True)
 
 
 def get_data(path):
@@ -42,30 +65,11 @@ def get_data(path):
         Returns:
             Dictionary of account data.
     """
-    # Constants (for automated use).
-    CRUNCHY_USER_INDEX = 0
-    CRUNCHY_PASS_INDEX = 1
-    CLIENT_ID_INDEX = 2
-    CLIENT_SECRET_INDEX = 3
-    USER_AGENT_INDEX = 4
-    REDDIT_USER_INDEX = 5
-    REDDIT_PASS_INDEX = 6
-
     # Get data from text file (for automated use).
     print("Fetching Account Data...", end="")
     with open(path, "r") as data_file:
-        account_data = data_file.read().split("\n")
+        data_dictionary = json.load(data_file)
     print("Completed")
-
-    # Grab relevant data and store it in the data_dictionary
-    data_dictionary = {"crunchy_username": account_data[CRUNCHY_USER_INDEX],
-                       "crunchy_password": account_data[CRUNCHY_PASS_INDEX],
-                       "reddit_client_id": account_data[CLIENT_ID_INDEX],
-                       "reddit_client_secret": account_data[CLIENT_SECRET_INDEX],
-                       "reddit_user_agent": account_data[USER_AGENT_INDEX],
-                       "reddit_username": account_data[REDDIT_USER_INDEX],
-                       "reddit_password": account_data[REDDIT_PASS_INDEX]}
-
     return data_dictionary
 
 
@@ -88,26 +92,21 @@ def crunchy_data_fetch(username, password, debug):
     valid_guest_pass = []
 
     # Determine the executable.
-    executable_path = Path("./bin")
+    script_path = get_script_path()
+    executable_base = script_path.parent.parent.joinpath("bin")
     if sys.platform == "darwin":
-        executable_path = executable_path.joinpath("osx")
-        if debug:
-            executable_path = executable_path.joinpath("chromedriver")
-        else:
-            executable_path = executable_path.joinpath("phantomjs")
+        executable_path = executable_base.joinpath("osx", "chromedriver")
     else:
-        executable_path = executable_path.joinpath("windows")
-        if debug:
-            executable_path = executable_path.joinpath("chromedriver.exe")
-        else:
-            executable_path = executable_path.joinpath("phantomjs.exe")
+        executable_path = executable_base.joinpath("windows", "chromedriver")
 
-    if debug:
-        driver = webdriver.Chrome(executable_path.as_posix(),
-                                  service_log_path="./logs/chrome.log")
-    else:
-        driver = webdriver.PhantomJS(executable_path.as_posix(),
-                                     service_log_path="./logs/phantom.log")
+    log_path = get_log_directory()
+    chrome_options = Options()
+    chrome_options.add_argument("--log-path={}".format(log_path.joinpath("chrome.log").as_posix()))
+    if not debug:
+        chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(executable_path=executable_path.as_posix(),
+                              options=chrome_options)
+
     driver.get("https://www.crunchyroll.com/login?next=%2F")
 
     # Login to CrunchyRoll
@@ -135,8 +134,7 @@ def crunchy_data_fetch(username, password, debug):
     if not guest_pass_tables:
         raise NoSuchElementException
 
-    row_list = guest_pass_tables[
-        GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name("tr")
+    row_list = guest_pass_tables[GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name("tr")
 
     # Parse HTML table data.
     for row in row_list:
