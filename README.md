@@ -1,10 +1,10 @@
 # CrunchyBot
 ## Description:
 This is a simple bot/script I made to publish my CrunchyRoll Guest Passes to Reddit.
-It uses Selenium and PhantomJS to extract the valid guest passes from CrunchyRoll
+It uses Selenium and Chromedriver to extract the valid guest passes from CrunchyRoll
 and PRAW to publish it /r/Crunchyroll's weekly Megathread. This is not a bot made
 to run indefinitely; however, it can be altered to do so if one so desired.
-It was intended for use in conjunction with a task scheduler to check once every month
+It was intended for use in conjunction with a task scheduler/cronjob to check once every month
 (or four if you wish to publish them in sets before guest passes expire) for new guest passes.
 
 ## Changes:
@@ -27,14 +27,39 @@ As such, the data file now must include additional data. See below for a quick g
 
 ## Requirement:
 * Selenium
-* PhantomJS
-* PRAW 4.0+
+* Chrome
+* PRAW 6.1.0+
 * Python 3.5+
 
+### Prerequisites:
+You will need to have Chrome installed on your system at its default installation path.
+This is due to the `chromedriver` working with your Chrome installation to retrieve
+Crunchyroll Guest Pass.
+
+If you would rather use bring in `chromedriver` yourself, the version of `chromedriver` 
+that has been verified to work is `2.45`. Replace the `chromedriver` under the `bin/`
+directory.
+
+### With Pipenv
+Assuming you have `pipenv` installed on your system, run the following within the repo:
+```
+$ pipenv --three
+```
+This will setup a virtual environment for Crunchybot to work in without interferring your
+other python projects.
+
+With `pipenv` initialized, run:
+```
+$ pipenv install
+```
+This will use the `Pipfile` and `Pipfile.lock` to fetch and verify dependencies.
+
+### Without Pipenv
 Install PRAW and Selenium by running the following command:
 ```
  $ pip install -r requirements.txt
 ```
+
 
 The other requirements are included in the `bin` directory of the project.
 
@@ -45,13 +70,15 @@ The other requirements are included in the `bin` directory of the project.
      ```
   2. Navigate to where you clone the repository
      ```
-        cd CrunchyBot
+         cd CrunchyBot
      ```
-  3. Update the templated `botData.txt` with your information.
+  3. Update the templated `botData.json` with your information.
   4. Run 
-    ```
-        python src/CrunchyBot.py /path/to/botData.txt [--debug/-d]
-    ```
+     ```
+         pipenv run python src/CrunchyBot.py [--debug/-d] /path/to/botData.json
+         // or
+         python src/CrunchyBot.py [--debug/-d] /path/to/botData.json
+      ```
 
 ## Automating:
 Add the Python script to the Windows Task Scheduler with monthly frequency.
