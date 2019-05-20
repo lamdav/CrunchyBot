@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-praw = "==6.1.0"
-prawcore = "==1.0.0"
+praw = "==6.2.0"
+prawcore = "==1.0.1"
 selenium = "==3.141.0"
 
 [dev-packages]
