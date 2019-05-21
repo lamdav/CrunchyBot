@@ -25,6 +25,27 @@ As such, the data file now must include additional data. See below for a quick g
   7. You should now see the app created. Right below the name and below `personal use script` will be your
      `client_id`. Within the box, to the right of the word `secret`, is your `client_secret`.
 
+## Install:
+`pip install crunchy-bot`
+
+## Setup:
+Run `crunchy init` to generate config file:
+```json
+{
+  "crunchy_username": "crunchy_user",
+  "crunchy_password": "crunchy_pass",
+  "reddit_client_id": "client_id",
+  "reddit_client_secret": "client_secret",
+  "reddit_user_agent": "CrunchyBot:v4.0.0 (hosted by /u/{YOUR_USERNAME})",
+  "reddit_username": "reddit_user",
+  "reddit_password": "reddit_pass",
+  "log_dir": "/tmp/crunchybot/logs"
+}
+```
+or save this to `~/.crunchybot`.
+
+Execute `crunchy publish [--config path/to/.crunchybot] [--debug/-d]` to start scrapping and publishing.
+
 ## Requirement:
 * Selenium
 * Chrome
@@ -36,9 +57,12 @@ You will need to have Chrome installed on your system at its default installatio
 This is due to the `chromedriver` working with your Chrome installation to retrieve
 Crunchyroll Guest Pass.
 
-If you would rather use bring in `chromedriver` yourself, the version of `chromedriver` 
+**Note** As of `4.0.0`, `chromedriver` will not be provided. Please refer to [link](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver#quick-installation)
+on setting up
+
+~~If you would rather use bring in `chromedriver` yourself, the version of `chromedriver` 
 that has been verified to work is `2.45`. Replace the `chromedriver` under the `bin/`
-directory.
+directory.~~
 
 ### With Pipenv
 Assuming you have `pipenv` installed on your system, run the following within the repo:
