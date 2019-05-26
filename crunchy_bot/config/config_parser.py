@@ -16,4 +16,10 @@ class Config(object):
 
 class ConfigParser(object):
     def parse(self, path: pathlib.Path) -> Config:
+        """
+        Given a path, parse and return a Config object with data.
+
+        :param path: Path to configuration file to parse.
+        :return: Config object with data from configuration file.
+        """
         raise NotImplementedError("parse is not implemented")
