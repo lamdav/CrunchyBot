@@ -26,6 +26,9 @@ def cli(context):
 @cli.command()
 @click.pass_obj
 def init(context):
+    """
+    Initialize CrunchyBot's credentials file.
+    """
     crunchy_username = click.prompt("Crunchyroll Username")
     crunchy_password = click.prompt("Crunchyroll Password", hide_input=True)
     reddit_client_id = click.prompt("Reddit Client ID")
@@ -65,6 +68,9 @@ def init(context):
 @click.option("--debug", "-d", type=bool, is_flag=True, default=False)
 @click.pass_obj
 def publish(context: Context, config: str, debug: bool):
+    """
+    Searches for Guest Passes and publishes it to reddit.
+    """
     logger = context.logger
     data_path = pathlib.Path(config)
 
