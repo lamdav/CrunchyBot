@@ -8,7 +8,7 @@ with open(setup_path.joinpath("README.md").as_posix(), encoding="utf-8", mode="r
     long_description = f.read()
 
 setup(name="crunchy_bot",
-      version="4.0.3",
+      version="4.0.5",
       description="Crunchyroll Guest Pass Publisher for Reddit",
       long_description=long_description,
       long_description_content_type="text/markdown",
