@@ -12,6 +12,9 @@ Due to how the PRAW library has changed, all users now must create a
 [reddit script app](https://github.com/reddit/reddit/wiki/OAuth2). 
 As such, the data file now must include additional data. See below for a quick guide on how to set this up.
 
+As of `4.0.0`, binaries for `chromedriver` and other tooling will not be included. Please refer to [link](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver#quick-installation)
+on setting up and installing `chromedriver`.
+
 ## Setting Up Reddit Account:
   1. Log on to the bot account.
   2. Go the bot account's `preferences` from the upper-right corner.
@@ -58,7 +61,7 @@ This is due to the `chromedriver` working with your Chrome installation to retri
 Crunchyroll Guest Pass.
 
 **Note** As of `4.0.0`, `chromedriver` will not be provided. Please refer to [link](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver#quick-installation)
-on setting up
+on setting up.
 
 ~~If you would rather use bring in `chromedriver` yourself, the version of `chromedriver` 
 that has been verified to work is `2.45`. Replace the `chromedriver` under the `bin/`
