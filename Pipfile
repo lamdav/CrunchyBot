@@ -13,6 +13,7 @@ click = "==7.0"
 twine = "*"
 setuptools = "*"
 wheel = "*"
+pytest = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.7.3"

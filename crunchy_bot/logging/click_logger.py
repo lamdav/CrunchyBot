@@ -26,4 +26,4 @@ class ClickLogger(Logger):
         self.log(LogTag.CRITICAL, message, LogColor.CRITICAL)
 
     def log(self, tag: LogTag, message: str, color: LogColor):
-        click.secho("[ {tag} ] {message}".format(tag=tag.name[:4], message=message), fg=color.value)
+        click.secho(f"[ {tag.name[:4]} ] {message}", fg=color.value)

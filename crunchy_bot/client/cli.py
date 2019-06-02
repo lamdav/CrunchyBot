@@ -53,10 +53,10 @@ def init(context):
     config_path = pathlib.Path(config_path).resolve()
     if config_path.exists():
         if config_path.is_dir():
-            context.logger.error("{} is a directory".format(config_path.as_posix()))
+            context.logger.error(f"{config_path.as_posix()} is a directory")
             exit(1)
         else:
-            overwrite = click.confirm("Overwrite {}".format(config_path.as_posix()), default=False, show_default=True)
+            overwrite = click.confirm(f"Overwrite {config_path.as_posix()}", default=False, show_default=True)
             if not overwrite:
                 exit(1)
     with open(config_path, "w") as f:
@@ -79,7 +79,7 @@ def publish(context: Context, config: str, debug: bool):
     try:
         config = config_parser.parse(data_path)
     except ValueError as e:
-        logger.error("Failed to parse config: {}".format(str(e)))
+        logger.error(f"Failed to parse config: {str(e)}")
         exit(1)
 
     fetcher = GuestPassFetcher(config, logger=logger)
@@ -109,5 +109,5 @@ def publish(context: Context, config: str, debug: bool):
         else:
             logger.warn("Failed to find thread to publish to Reddit")
     except OAuthException as e:
-        logger.error("Failed to login to Reddit: {}".format(str(e)))
+        logger.error(f"Failed to login to Reddit: {str(e)}")
         exit(1)

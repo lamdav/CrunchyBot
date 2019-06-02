@@ -1,5 +1,6 @@
 import pathlib
-from typing import Sequence
+from enum import Enum
+from typing import Sequence, Optional
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -15,8 +16,42 @@ from crunchy_bot.logging.logger import Logger
 from crunchy_bot.logging.noop_logger import NoopLogger
 
 
+class GuestPassStatus(Enum):
+    UNKNOWN = "UNKNOWN"
+    VALID = "VALID"
+    EXPIRED = "EXPIRED"
+    REDEEMED = "REDEEMED"
+
+    @staticmethod
+    def to_enum(value: str) -> Enum:
+        value = value.upper()
+        if value == GuestPassStatus.VALID.value:
+            return GuestPassStatus.VALID
+        elif value == GuestPassStatus.EXPIRED.value:
+            return GuestPassStatus.EXPIRED
+        elif value == GuestPassStatus.REDEEMED.value:
+            return GuestPassStatus.REDEEMED
+        return GuestPassStatus.UNKNOWN
+
+
+class Row(object):
+    """
+    Representation of a row of the Guest Pass Table
+    """
+
+    def __init__(self, created_at: str, guest_pass: str, description: str, status: str, expiration: str, redeemer: str,
+                 action: str):
+        self.created_at = created_at
+        self.guest_pass = guest_pass
+        self.description = description
+        self.status = GuestPassStatus.to_enum(status)
+        self.expiration = expiration
+        self.redeemer = redeemer
+        self.action = action
+
+
 class GuestPassFetcher(Fetcher):
-    def __init__(self, config: Config, logger: Logger = None):
+    def __init__(self, config: Config, logger: Optional[Logger] = None):
         self.config = config
         self.logger = logger if logger is not None else NoopLogger()
 
@@ -46,24 +81,17 @@ class GuestPassFetcher(Fetcher):
                 List of Guest Passes as Strings.
         """
         # Constants.
-        VALID_KEY_OFFSET = 2
         GUEST_PASS_TABLE_INDEX = 0
+        GUEST_PASS_TABLE_COLUMNS = 7
 
         # List to be returned. Will hold all valid guest passes.
-        valid_guest_pass = []
-
-        # Determine the executable.
-        # executable_base = self._get_bin()
-        # if sys.platform == "darwin":
-        #     executable_path = executable_base.joinpath("osx", "chromedriver")
-        # else:
-        #     executable_path = executable_base.joinpath("windows", "chromedriver")
+        valid_guest_passes = []
 
         log_path = pathlib.Path(self.config.log_dir)
         if not log_path.exists():
             log_path.mkdir(parents=True)
         chrome_options = Options()
-        chrome_options.add_argument("--log-path={}".format(log_path.joinpath("chrome.log").as_posix()))
+        chrome_options.add_argument(f"--log-path={log_path.joinpath('chrome.log').as_posix()}")
         if not debug:
             chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(options=chrome_options)
@@ -84,7 +112,7 @@ class GuestPassFetcher(Fetcher):
             password_field.send_keys(Keys.ENTER)
         except TimeoutException:
             driver.quit()
-            raise TimeoutException
+            raise TimeoutException("Unable to find username/password field: Crunchyroll took too long to load")
 
         # Navigate to the last page of the Guest Pass page.~
         driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
@@ -101,11 +129,13 @@ class GuestPassFetcher(Fetcher):
         # Parse HTML table data.
         for row in row_list:
             cell_list = row.find_elements_by_tag_name("td")
-            for k in range(len(cell_list)):
-                cell = cell_list[k]
-                if cell.text == "Valid":
-                    valid_guest_pass.append(cell_list[k - VALID_KEY_OFFSET].text)
+            if len(cell_list) == GUEST_PASS_TABLE_COLUMNS:
+                cell_list = list(map(lambda cell: cell.text, cell_list))
+                row_entry = Row(*cell_list)
+                if row_entry.status is GuestPassStatus.VALID:
+                    valid_guest_passes.append(row_entry.guest_pass)
+                    break
 
         # Close the driver.
         driver.close()
-        return valid_guest_pass
+        return valid_guest_passes

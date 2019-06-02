@@ -8,7 +8,11 @@ with open(setup_path.joinpath("README.md").as_posix(), encoding="utf-8", mode="r
     long_description = f.read()
 
 setup(name="crunchy_bot",
-      version="4.0.5",
+      use_scm_version=True,
+      setup_requires=[
+          "setuptools_scm",
+          "pytest-runner"
+      ],
       description="Crunchyroll Guest Pass Publisher for Reddit",
       long_description=long_description,
       long_description_content_type="text/markdown",
@@ -33,8 +37,8 @@ setup(name="crunchy_bot",
           "prawcore==1.0.0",
           "selenium==3.141.0"
       ],
-      test_requires=[
-          "pytest==4.5.0"
+      tests_require=[
+          "pytest"
       ],
       python_requires=">=3.5",
       entry_points={

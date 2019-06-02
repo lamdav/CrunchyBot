@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 if [[ $1 == "build" ]]; then
     rm -rf ./dist/
     python setup.py sdist bdist_wheel

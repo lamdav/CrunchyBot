@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Optional
 
 import praw
 
@@ -8,7 +8,7 @@ from crunchy_bot.publisher.publisher import Publisher
 
 
 class RedditPublisher(Publisher):
-    def __init__(self, client: praw.Reddit, logger: Logger = None):
+    def __init__(self, client: praw.Reddit, logger: Optional[Logger] = None):
         self.client = client
         self.logger = logger if logger is not None else NoopLogger()
 
@@ -16,12 +16,12 @@ class RedditPublisher(Publisher):
         comment = self._build_comment_text(guest_passes)
         return self._reddit_post(comment)
 
-    def _build_comment_text(self, guest_passes) -> str:
+    def _build_comment_text(self, guest_passes: Sequence[str]) -> str:
         """
             Generates a Reddit formatted text to display the code.
 
             Args:
-                guest_pass:      List of valid guest passes in String form
+                guest_passes:      List of valid guest passes in String form
             Returns:
                 String that has been formatted for Reddit submission.
         """
@@ -37,7 +37,7 @@ class RedditPublisher(Publisher):
 
         return text
 
-    def _reddit_post(self, comment_text):
+    def _reddit_post(self, comment_text: str) -> bool:
         """
             Post Guest Passes to Reddit on given user account.
 
@@ -49,14 +49,14 @@ class RedditPublisher(Publisher):
         # Return boolean.
         submission_status = False
 
-        # Key words to look for.
-        search_list = ["weekly", "guest", "pass", "megathread"]
-
         # Bot login.
-        print("Logged in as {0}...".format(self.client.user.me()), end="")
+        self.logger.info(f"Logged in as {self.client.user.me()}...")
 
         # Navigate to subreddit.
         subreddit = self.client.subreddit('Crunchyroll')
+
+        # Key words to look for.
+        search_list = {"weekly", "guest", "pass", "megathread"}
 
         # Find weekly guest pass submission.
         for submission in subreddit.hot(limit=100):
