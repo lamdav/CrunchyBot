@@ -22,8 +22,14 @@ action "pytest" {
   uses = "./actions/pytest"
 }
 
-action "pypi" {
+action "tag-filter" {
   needs = "pytest"
+  uses = "actions/bin/filter@master"
+  args = "tag"
+}
+
+action "pypi" {
+  needs = "tag-filter"
   uses = "./actions/pypi"
   secrets = ["TWINE_USERNAME", "TWINE_PASSWORD"]
 }
