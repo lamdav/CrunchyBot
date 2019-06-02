@@ -7,7 +7,7 @@ LABEL "com.github.actions.color"="yellow"
 
 RUN apk add --no-cache bash
 RUN pip install --upgrade pip
-RUN pip install pytest
+RUN pip install pytest setuptools
 RUN python --version
 RUN pip --version
 RUN pytest --version
