@@ -1,7 +1,7 @@
 # CrunchyBot
 ## Description:
 This is a simple bot/script I made to publish my CrunchyRoll Guest Passes to Reddit.
-It uses Selenium and Chromedriver to extract the valid guest passes from CrunchyRoll
+It uses Selenium and Chromedriver to extract valid guest passes from CrunchyRoll
 and PRAW to publish it /r/Crunchyroll's weekly Megathread. This is not a bot made
 to run indefinitely; however, it can be altered to do so if one so desired.
 It was intended for use in conjunction with a task scheduler/cronjob to check once every month
@@ -12,7 +12,8 @@ Due to how the PRAW library has changed, all users now must create a
 [reddit script app](https://github.com/reddit/reddit/wiki/OAuth2). 
 As such, the data file now must include additional data. See below for a quick guide on how to set this up.
 
-As of `4.0.0`, binaries for `chromedriver` and other tooling will not be included. Please refer to [link](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver#quick-installation)
+As of `4.0.0`, binaries for `chromedriver` and other tooling will not be included. 
+Please refer to [link](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver#quick-installation)
 on setting up and installing `chromedriver`.
 
 ## Setting Up Reddit Account:
@@ -27,6 +28,15 @@ on setting up and installing `chromedriver`.
   6. Click `create app` button when done.
   7. You should now see the app created. Right below the name and below `personal use script` will be your
      `client_id`. Within the box, to the right of the word `secret`, is your `client_secret`.
+
+## Prerequisites:
+You will need to have Chrome installed on your system at its default installation path.
+This is due to the `chromedriver` working with your Chrome installation to retrieve
+Crunchyroll Guest Pass.
+
+**Note** As of `4.0.0`, `chromedriver` will not be provided. 
+Please refer to [link](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver#quick-installation)
+on setting up.
 
 ## Install:
 `pip install crunchy-bot`
@@ -49,24 +59,7 @@ or save this to `~/.crunchybot`.
 
 Execute `crunchy publish [--config path/to/.crunchybot] [--debug/-d]` to start scrapping and publishing.
 
-## Requirement:
-* Selenium
-* Chrome
-* PRAW 6.1.0+
-* Python 3.5+
-
-### Prerequisites:
-You will need to have Chrome installed on your system at its default installation path.
-This is due to the `chromedriver` working with your Chrome installation to retrieve
-Crunchyroll Guest Pass.
-
-**Note** As of `4.0.0`, `chromedriver` will not be provided. Please refer to [link](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver#quick-installation)
-on setting up.
-
-~~If you would rather use bring in `chromedriver` yourself, the version of `chromedriver` 
-that has been verified to work is `2.45`. Replace the `chromedriver` under the `bin/`
-directory.~~
-
+## Development
 ### With Pipenv
 Assuming you have `pipenv` installed on your system, run the following within the repo:
 ```
@@ -79,34 +72,37 @@ With `pipenv` initialized, run:
 ```
 $ pipenv install
 ```
-This will use the `Pipfile` and `Pipfile.lock` to fetch and verify dependencies.
+This will use the `Pipfile` and `Pipfile.lock` to fetch and verify dependencies. Run `pipenv shell` to 
+execute a shell into the generated virtual environment.
 
 ### Without Pipenv
 Install PRAW and Selenium by running the following command:
 ```
- $ pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
+Once setup with or without `pipenv`, run `pip install -e .` within the repository. This
+should install a local version of `crunchy_bot` and its cli. This will also generate
+a `version.py` using `setuptools_scm`.
 
-The other requirements are included in the `bin` directory of the project.
+Make and test your changes locally. Pull Request are welcome. 
 
-## How to Use:
-  1. Clone the project
-     ```
-        git clone https://github.com/lamdaV/CrunchyBot.git
-     ```
-  2. Navigate to where you clone the repository
-     ```
-         cd CrunchyBot
-     ```
-  3. Update the templated `botData.json` with your information.
-  4. Run 
-     ```
-         pipenv run python src/CrunchyBot.py [--debug/-d] /path/to/botData.json
-         // or
-         python src/CrunchyBot.py [--debug/-d] /path/to/botData.json
-      ```
 
 ## Automating:
+### OSX/Linux
+Run `crontab -e` and add
+```
+0 0 1 * * zsh -lc "/Users/lamdav/.pyenv/shims/crunchy publish"
+```
+You can replace `zsh -lc` with your shell's equivalent. This is mainly to execute any of your profile
+presets that may handle setting up `PATH` and other required environment variables to run.
+
+### Windows
 Add the Python script to the Windows Task Scheduler with monthly frequency.
-Here is a [link](http://blogs.esri.com/esri/arcgis/2013/07/30/scheduling-a-scrip/) to setup the Task Scheduler.
+Here is a [link](https://blog.netwrix.com/2018/07/03/how-to-automate-powershell-scripts-with-task-scheduler/)
+to setup the Task Scheduler.
+
+### Github
+You can also clone this repository and utilize `Github Actions` to run this task on the first of each month.
+You must add the required data as all cap snake case secret variables.
+
