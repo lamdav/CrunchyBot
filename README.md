@@ -92,7 +92,7 @@ Make and test your changes locally. Pull Request are welcome.
 ### OSX/Linux
 Run `crontab -e` and add
 ```
-0 0 1 * * zsh -lc "/Users/lamdav/.pyenv/shims/crunchy publish"
+0 0 1 * * zsh -lc "/path/to/crunchy publish"
 ```
 You can replace `zsh -lc` with your shell's equivalent. This is mainly to execute any of your profile
 presets that may handle setting up `PATH` and other required environment variables to run.
