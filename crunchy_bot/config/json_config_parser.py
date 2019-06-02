@@ -18,31 +18,45 @@ class JsonConfigParser(ConfigParser):
         with open(posix_path, "r") as data_file:
             data_dictionary = json.load(data_file)
 
-        crunchy_username = data_dictionary.get("crunchy_username", os.environ.get("CRUNCHY_USERNAME"))
+        crunchy_username = data_dictionary.get(
+            "crunchy_username", os.environ.get("CRUNCHY_USERNAME")
+        )
         if crunchy_username is None:
             raise ValueError(f"Missing crunchy_username in {posix_path}")
 
-        crunchy_password = data_dictionary.get("crunchy_password", os.environ.get("CRUNCHY_PASSWORD"))
+        crunchy_password = data_dictionary.get(
+            "crunchy_password", os.environ.get("CRUNCHY_PASSWORD")
+        )
         if crunchy_password is None:
             raise ValueError(f"Missing crunchy_password in {posix_path}")
 
-        reddit_client_id = data_dictionary.get("reddit_client_id", os.environ.get("REDDIT_CLIENT_ID"))
+        reddit_client_id = data_dictionary.get(
+            "reddit_client_id", os.environ.get("REDDIT_CLIENT_ID")
+        )
         if reddit_client_id is None:
             raise ValueError(f"Missing reddit_client_id in {posix_path}")
 
-        reddit_client_secret = data_dictionary.get("reddit_client_secret", os.environ.get("REDDIT_CLIENT_SECRET"))
+        reddit_client_secret = data_dictionary.get(
+            "reddit_client_secret", os.environ.get("REDDIT_CLIENT_SECRET")
+        )
         if reddit_client_secret is None:
             raise ValueError(f"Missing reddit_client_secret in {posix_path}")
 
-        reddit_user_agent = data_dictionary.get("reddit_user_agent", os.environ.get("REDDIT_USER_AGENT"))
+        reddit_user_agent = data_dictionary.get(
+            "reddit_user_agent", os.environ.get("REDDIT_USER_AGENT")
+        )
         if reddit_user_agent is None:
             raise ValueError(f"Missing reddit_user_agent in {posix_path}")
 
-        reddit_username = data_dictionary.get("reddit_username", os.environ.get("REDDIT_USERNAME"))
+        reddit_username = data_dictionary.get(
+            "reddit_username", os.environ.get("REDDIT_USERNAME")
+        )
         if reddit_username is None:
             raise ValueError(f"Missing reddit_username in {posix_path}")
 
-        reddit_password = data_dictionary.get("reddit_password", os.environ.get("REDDIT_PASSWORD"))
+        reddit_password = data_dictionary.get(
+            "reddit_password", os.environ.get("REDDIT_PASSWORD")
+        )
         if reddit_password is None:
             raise ValueError(f"Missing reddit_password in {posix_path}")
 
