@@ -103,3 +103,4 @@ $RECYCLE.BIN/
 /logs/
 .vscode/
 .eggs
+**/version.py

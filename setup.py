@@ -9,7 +9,7 @@ with open(setup_path.joinpath("README.md").as_posix(), encoding="utf-8", mode="r
 
 setup(
     name="crunchy_bot",
-    use_scm_version=True,
+    use_scm_version={"write_to": "./crunchy_bot/client/version.py"},
     setup_requires=["setuptools_scm", "pytest-runner"],
     description="Crunchyroll Guest Pass Publisher for Reddit",
     long_description=long_description,
