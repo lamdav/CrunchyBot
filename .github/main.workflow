@@ -20,5 +20,5 @@ action "pytest" {
 action "pypi" {
   needs = "pytest"
   uses = "./actions/pypi"
-  secret = ["TWINE_USERNAME", "TWINE_PASSWORD"]
+  secrets = ["TWINE_USERNAME", "TWINE_PASSWORD"]
 }
