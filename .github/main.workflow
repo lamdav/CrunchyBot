@@ -9,7 +9,7 @@ workflow "publish" {
 }
 
 workflow "run" {
-  on = "schedule("0 0 1 * *")
+  on = "schedule(0 0 1 * *)"
   resolves = ["execute"]
 }
 
