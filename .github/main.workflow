@@ -3,6 +3,11 @@ workflow "test" {
   resolves = ["pytest"]
 }
 
+workflow "publish" {
+  on = "release"
+  resolves = ["pypi"]
+}
+
 action "black" {
   uses = "./actions/black"
 }
@@ -10,4 +15,10 @@ action "black" {
 action "pytest" {
   needs = "black"
   uses = "./actions/pytest"
+}
+
+action "pypi" {
+  needs = "pytest"
+  uses = "./actions/pypi"
+  secret = ["TWINE_USERNAME", "TWINE_PASSWORD"]
 }
