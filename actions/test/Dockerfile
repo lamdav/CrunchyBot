@@ -6,6 +6,7 @@ LABEL "com.github.actions.icon"="upload-cloud"
 LABEL "com.github.actions.color"="yellow"
 
 RUN apk add --no-cache bash
+RUN apk add git
 RUN pip install --upgrade pip
 RUN pip install pytest setuptools
 RUN python --version
