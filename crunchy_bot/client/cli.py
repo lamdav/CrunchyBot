@@ -6,6 +6,7 @@ import praw
 from prawcore import OAuthException
 from selenium.common.exceptions import NoSuchElementException
 
+from crunchy_bot.client.version import version as v
 from crunchy_bot.config.json_config_parser import JsonConfigParser
 from crunchy_bot.fetcher.guest_pass_fetcher import GuestPassFetcher
 from crunchy_bot.logging.click_logger import ClickLogger
@@ -131,3 +132,10 @@ def publish(context: Context, config: str, debug: bool):
     except OAuthException as e:
         logger.error(f"Failed to login to Reddit: {str(e)}")
         exit(1)
+
+
+@cli.command()
+@click.pass_obj
+def version(context: Context):
+    logger = context.logger
+    logger.info(f"Crunchy_bot {v}")
