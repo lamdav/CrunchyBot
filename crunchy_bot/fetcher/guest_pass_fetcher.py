@@ -39,8 +39,16 @@ class Row(object):
     Representation of a row of the Guest Pass Table
     """
 
-    def __init__(self, created_at: str, guest_pass: str, description: str, status: str, expiration: str, redeemer: str,
-                 action: str):
+    def __init__(
+        self,
+        created_at: str,
+        guest_pass: str,
+        description: str,
+        status: str,
+        expiration: str,
+        redeemer: str,
+        action: str,
+    ):
         self.created_at = created_at
         self.guest_pass = guest_pass
         self.description = description
@@ -91,7 +99,9 @@ class GuestPassFetcher(Fetcher):
         if not log_path.exists():
             log_path.mkdir(parents=True)
         chrome_options = Options()
-        chrome_options.add_argument(f"--log-path={log_path.joinpath('chrome.log').as_posix()}")
+        chrome_options.add_argument(
+            f"--log-path={log_path.joinpath('chrome.log').as_posix()}"
+        )
         if not debug:
             chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(options=chrome_options)
@@ -103,16 +113,21 @@ class GuestPassFetcher(Fetcher):
             # Since CloudFlare stalls the login page, this is to wait the estimated
             # 5 seconds (20 seconds to be sure) for CloudFlare to approve of
             # browser.
-            username_field = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "login_form_name")))
+            username_field = WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.ID, "login_form_name"))
+            )
             username_field.send_keys(self.config.crunchy_username)
 
             password_field = WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.ID, "login_form_password")))
+                EC.presence_of_element_located((By.ID, "login_form_password"))
+            )
             password_field.send_keys(self.config.crunchy_password)
             password_field.send_keys(Keys.ENTER)
         except TimeoutException:
             driver.quit()
-            raise TimeoutException("Unable to find username/password field: Crunchyroll took too long to load")
+            raise TimeoutException(
+                "Unable to find username/password field: Crunchyroll took too long to load"
+            )
 
         # Navigate to the last page of the Guest Pass page.~
         driver.get("https://www.crunchyroll.com/acct/?action=guestpass")
@@ -124,7 +139,9 @@ class GuestPassFetcher(Fetcher):
         if not guest_pass_tables:
             raise NoSuchElementException
 
-        row_list = guest_pass_tables[GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name("tr")
+        row_list = guest_pass_tables[GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name(
+            "tr"
+        )
 
         # Parse HTML table data.
         for row in row_list:

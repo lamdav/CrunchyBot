@@ -40,7 +40,11 @@ def test_log(click_mock: click, click_logger: Logger):
     click_mock.secho.assert_called_with(f"[ {tag.name[:4]} ] {message}", fg=color.value)
 
 
-def run_test(logging_method: Callable[[str], None], message: str, tag: LogTag, color: LogColor):
+def run_test(
+    logging_method: Callable[[str], None], message: str, tag: LogTag, color: LogColor
+):
     with patch("crunchy_bot.logging.click_logger.click", autospec=True) as click_mock:
         logging_method(message)
-        click_mock.secho.assert_called_with(f"[ {tag.name[:4]} ] {message}", fg=color.value)
+        click_mock.secho.assert_called_with(
+            f"[ {tag.name[:4]} ] {message}", fg=color.value
+        )

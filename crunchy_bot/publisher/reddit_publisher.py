@@ -30,8 +30,10 @@ class RedditPublisher(Publisher):
         text = "Here are some valid passes:  \n\n"
         for guest_pass in guest_passes:
             text += f" * {guest_pass}\n"
-        text += "  \n*Disclaimer: This is a bot. " \
-                "Here is a [link](https://github.com/lamdaV/CrunchyBot/tree/master) for more detail.*"
+        text += (
+            "  \n*Disclaimer: This is a bot. "
+            "Here is a [link](https://github.com/lamdaV/CrunchyBot/tree/master) for more detail.*"
+        )
 
         self.logger.info("Built Comment Text")
 
@@ -53,7 +55,7 @@ class RedditPublisher(Publisher):
         self.logger.info(f"Logged in as {self.client.user.me()}...")
 
         # Navigate to subreddit.
-        subreddit = self.client.subreddit('Crunchyroll')
+        subreddit = self.client.subreddit("Crunchyroll")
 
         # Key words to look for.
         search_list = {"weekly", "guest", "pass", "megathread"}

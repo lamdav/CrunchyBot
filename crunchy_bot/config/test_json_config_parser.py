@@ -21,7 +21,9 @@ def json_config_parser(logger: Logger) -> ConfigParser:
 
 def test_parse(logger: Logger, json_config_parser: ConfigParser):
     with patch("crunchy_bot.config.json_config_parser.open", mock_open()) as open_mock:
-        with patch("crunchy_bot.config.json_config_parser.json", autospec=True) as json_mock:
+        with patch(
+            "crunchy_bot.config.json_config_parser.json", autospec=True
+        ) as json_mock:
             data = {
                 "crunchy_username": "crunchy_user",
                 "crunchy_password": "crunchy_pass",
@@ -30,7 +32,7 @@ def test_parse(logger: Logger, json_config_parser: ConfigParser):
                 "reddit_user_agent": "CrunchyBot:v4.0.0 (hosted by /u/{YOUR_USERNAME})",
                 "reddit_username": "reddit_user",
                 "reddit_password": "reddit_pass",
-                "log_dir": "/tmp/crunchybot/logs"
+                "log_dir": "/tmp/crunchybot/logs",
             }
             json_mock.load.return_value = data
 

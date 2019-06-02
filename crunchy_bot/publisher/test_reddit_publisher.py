@@ -25,8 +25,10 @@ def test_publish(client: praw.Reddit, logger: Logger):
     submission_mock = mock.MagicMock()
     submission_mock.title = "Unrelated post"
     guest_pass_submission_mock = mock.MagicMock()
-    guest_pass_submission_mock.title = "Weekly Guest Pass MegaThread for the week of May 27, 2019, " \
-                                       "Please use this thread to ask or give away Guest Passes."
+    guest_pass_submission_mock.title = (
+        "Weekly Guest Pass MegaThread for the week of May 27, 2019, "
+        "Please use this thread to ask or give away Guest Passes."
+    )
     subreddit_mock.hot.return_value = [submission_mock, guest_pass_submission_mock]
 
     publisher = RedditPublisher(client, logger=logger)

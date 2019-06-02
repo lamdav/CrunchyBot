@@ -10,12 +10,12 @@ class LogTag(Enum):
 
 
 class LogColor(Enum):
-    SUCCESS = 'green'
-    INFO = 'blue'
-    WARN = 'yellow'
-    ERROR = 'red'
-    CRITICAL = 'pink'
-    LOG = 'white'
+    SUCCESS = "green"
+    INFO = "blue"
+    WARN = "yellow"
+    ERROR = "red"
+    CRITICAL = "pink"
+    LOG = "white"
 
 
 class Logger(object):
@@ -25,7 +25,7 @@ class Logger(object):
 
         :param message: message to log
         """
-        raise NotImplementedError('success is not implemented')
+        raise NotImplementedError("success is not implemented")
 
     def info(self, message: str):
         """
@@ -33,7 +33,7 @@ class Logger(object):
 
         :param message: message to log
         """
-        raise NotImplementedError('info is not implemented')
+        raise NotImplementedError("info is not implemented")
 
     def warn(self, message: str):
         """
@@ -41,7 +41,7 @@ class Logger(object):
 
         :param message: message to log
         """
-        raise NotImplementedError('warn is not implemented')
+        raise NotImplementedError("warn is not implemented")
 
     def error(self, message: str):
         """
@@ -49,7 +49,7 @@ class Logger(object):
 
         :param message: message to log
         """
-        raise NotImplementedError('error is not implemented')
+        raise NotImplementedError("error is not implemented")
 
     def critical(self, message: str):
         """
@@ -57,7 +57,7 @@ class Logger(object):
 
         :param message: message to log
         """
-        raise NotImplementedError('critical is not implemented')
+        raise NotImplementedError("critical is not implemented")
 
     def log(self, tag: LogTag, message: str, color: LogColor):
         """
@@ -65,4 +65,4 @@ class Logger(object):
 
         :param message: message to log
         """
-        raise NotImplementedError('log is not implemented')
+        raise NotImplementedError("log is not implemented")

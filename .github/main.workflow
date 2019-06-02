@@ -1,8 +1,13 @@
-workflow "Test" {
+workflow "test" {
   on = "push"
-  resolves = ["Test Action"]
+  resolves = ["pytest"]
 }
 
-action "Test Action" {
-  uses = "./actions/test"
+action "black" {
+  uses = "./actions/black"
+}
+
+action "pytest" {
+  needs = "black"
+  uses = "./actions/pytest"
 }

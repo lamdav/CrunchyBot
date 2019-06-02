@@ -34,21 +34,31 @@ def init(context):
     reddit_client_id = click.prompt("Reddit Client ID")
     reddit_client_secret = click.prompt("Reddit Client Secret", hide_input=True)
     reddit_username = click.prompt("Reddit Username")
-    reddit_user_agent = click.prompt("Reddit User Agent", default=f"CrunchyBot:v4.0.0 (hosted by /u/{reddit_username})",
-                                     show_default=True)
+    reddit_user_agent = click.prompt(
+        "Reddit User Agent",
+        default=f"CrunchyBot:v4.0.0 (hosted by /u/{reddit_username})",
+        show_default=True,
+    )
     reddit_password = click.prompt("Reddit Password", hide_input=True)
-    log_dir = click.prompt("Log output directory", default="/tmp/crunchybot/logs", show_default=True)
-    config_path = click.prompt("Where to save config", default=pathlib.Path.home().joinpath(".crunchybot").as_posix(),
-                               show_default=True)
+    log_dir = click.prompt(
+        "Log output directory", default="/tmp/crunchybot/logs", show_default=True
+    )
+    config_path = click.prompt(
+        "Where to save config",
+        default=pathlib.Path.home().joinpath(".crunchybot").as_posix(),
+        show_default=True,
+    )
 
-    config = dict(crunchy_username=crunchy_username,
-                  crunchy_password=crunchy_password,
-                  reddit_client_id=reddit_client_id,
-                  reddit_client_secret=reddit_client_secret,
-                  reddit_user_agent=reddit_user_agent,
-                  reddit_username=reddit_username,
-                  reddit_password=reddit_password,
-                  log_dir=log_dir)
+    config = dict(
+        crunchy_username=crunchy_username,
+        crunchy_password=crunchy_password,
+        reddit_client_id=reddit_client_id,
+        reddit_client_secret=reddit_client_secret,
+        reddit_user_agent=reddit_user_agent,
+        reddit_username=reddit_username,
+        reddit_password=reddit_password,
+        log_dir=log_dir,
+    )
 
     config_path = pathlib.Path(config_path).resolve()
     if config_path.exists():
@@ -56,7 +66,9 @@ def init(context):
             context.logger.error(f"{config_path.as_posix()} is a directory")
             exit(1)
         else:
-            overwrite = click.confirm(f"Overwrite {config_path.as_posix()}", default=False, show_default=True)
+            overwrite = click.confirm(
+                f"Overwrite {config_path.as_posix()}", default=False, show_default=True
+            )
             if not overwrite:
                 exit(1)
     with open(config_path, "w") as f:
@@ -64,7 +76,11 @@ def init(context):
 
 
 @cli.command()
-@click.option("--config", type=click.Path(exists=True), default=pathlib.Path.home().joinpath(".crunchybot").as_posix())
+@click.option(
+    "--config",
+    type=click.Path(exists=True),
+    default=pathlib.Path.home().joinpath(".crunchybot").as_posix(),
+)
 @click.option("--debug", "-d", type=bool, is_flag=True, default=False)
 @click.pass_obj
 def publish(context: Context, config: str, debug: bool):
@@ -92,14 +108,18 @@ def publish(context: Context, config: str, debug: bool):
             exit(0)
         logger.info(f"Received Guest Passes: {guest_passes}")
     except NoSuchElementException:
-        logger.error("Failed to fetch Guest Passes. Please check your Crunchyroll credentials.")
+        logger.error(
+            "Failed to fetch Guest Passes. Please check your Crunchyroll credentials."
+        )
         exit(1)
 
-    client = praw.Reddit(client_id=config.reddit_client_id,
-                         client_secret=config.reddit_client_secret,
-                         user_agent=config.reddit_user_agent,
-                         username=config.reddit_username,
-                         password=config.reddit_password)
+    client = praw.Reddit(
+        client_id=config.reddit_client_id,
+        client_secret=config.reddit_client_secret,
+        user_agent=config.reddit_user_agent,
+        username=config.reddit_username,
+        password=config.reddit_password,
+    )
     publisher = RedditPublisher(client, logger=logger)
 
     try:

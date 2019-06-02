@@ -44,11 +44,13 @@ class JsonConfigParser(ConfigParser):
 
         self.logger.info("Fetched Account Data")
 
-        return Config(crunchy_username=crunchy_username,
-                      crunchy_password=crunchy_password,
-                      reddit_client_id=reddit_client_id,
-                      reddit_client_secret=reddit_client_secret,
-                      reddit_user_agent=reddit_user_agent,
-                      reddit_username=reddit_username,
-                      reddit_password=reddit_password,
-                      log_dir=log_dir)
+        return Config(
+            crunchy_username=crunchy_username,
+            crunchy_password=crunchy_password,
+            reddit_client_id=reddit_client_id,
+            reddit_client_secret=reddit_client_secret,
+            reddit_user_agent=reddit_user_agent,
+            reddit_username=reddit_username,
+            reddit_password=reddit_password,
+            log_dir=log_dir,
+        )
