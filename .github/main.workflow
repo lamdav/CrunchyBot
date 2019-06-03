@@ -1,6 +1,9 @@
 workflow "test" {
   on = "push"
-  resolves = ["pytest"]
+  resolves = [
+    "pytest",
+    "black"
+  ]
 }
 
 workflow "publish" {
@@ -18,12 +21,14 @@ action "black" {
 }
 
 action "pytest" {
-  needs = "black"
   uses = "./actions/pytest"
 }
 
 action "tag-filter" {
-  needs = "pytest"
+  needs = [
+    "pytest",
+    "black"
+  ]
   uses = "actions/bin/filter@master"
   args = "tag"
 }
