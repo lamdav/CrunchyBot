@@ -7,7 +7,7 @@ workflow "test" {
 }
 
 workflow "publish" {
-  on = "release"
+  on = "push"
   resolves = ["pypi"]
 }
 
