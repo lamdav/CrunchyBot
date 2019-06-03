@@ -1,12 +1,4 @@
-workflow "test" {
-  on = "push"
-  resolves = [
-    "pytest",
-    "black"
-  ]
-}
-
-workflow "publish" {
+workflow "test and publish on tag" {
   on = "push"
   resolves = ["pypi"]
 }
