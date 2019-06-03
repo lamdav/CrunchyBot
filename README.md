@@ -104,6 +104,6 @@ Here is a [link](https://blog.netwrix.com/2018/07/03/how-to-automate-powershell-
 to setup the Task Scheduler.
 
 ### Github
-You can also clone this repository and utilize `Github Actions` to run this task on the first of each month.
+You can also fork this repository and utilize `Github Actions` to run this task on the first of each month.
 You must add the required data as all cap snake case secret variables.
 
