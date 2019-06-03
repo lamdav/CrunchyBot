@@ -1,12 +1,4 @@
-workflow "test" {
-  on = "push"
-  resolves = [
-    "pytest",
-    "black"
-  ]
-}
-
-workflow "publish" {
+workflow "test and publish on tag" {
   on = "push"
   resolves = ["pypi"]
 }
@@ -25,7 +17,10 @@ action "pytest" {
 }
 
 action "tag-filter" {
-  needs = "test"
+  needs = [
+    "pytest",
+    "black"
+  ]
   uses = "actions/bin/filter@master"
   args = "tag"
 }
