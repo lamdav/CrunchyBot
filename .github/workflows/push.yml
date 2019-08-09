@@ -1,0 +1,20 @@
+on: push
+name: test and publish on tag
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: black
+      uses: ./actions/black
+    - name: pytest
+      uses: ./actions/pytest
+    - name: tag-filter
+      uses: actions/bin/filter@master
+      with:
+        args: tag
+    - name: pypi
+      uses: ./actions/pypi
+      env:
+        TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+        TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}

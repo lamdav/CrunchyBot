@@ -1,0 +1,20 @@
+on:
+  schedules:
+  - cron: 0 0 1 * *
+name: run
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: execute
+      uses: ./actions/run
+      env:
+        CRUNCHY_PASSWORD: ${{ secrets.CRUNCHY_PASSWORD }}
+        CRUNCHY_USERNAME: ${{ secrets.CRUNCHY_USERNAME }}
+        LOG_DIR: ${{ secrets.LOG_DIR }}
+        REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+        REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+        REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+        REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+        REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
