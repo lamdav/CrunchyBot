@@ -10,7 +10,7 @@ RUN pip install --upgrade pip
 RUN pip install crunchy_bot
 RUN python --version
 RUN pip --version
-RUN crunchy_bot version
+RUN crunchy version
 
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
