@@ -138,4 +138,4 @@ def publish(context: Context, config: str, debug: bool):
 @click.pass_obj
 def version(context: Context):
     logger = context.logger
-    logger.info(f"Crunchy_bot {v}")
+    logger.info(f"crunchy_bot {v}")
