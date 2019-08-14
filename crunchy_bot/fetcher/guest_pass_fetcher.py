@@ -57,6 +57,10 @@ class Row(object):
         self.redeemer = redeemer
         self.action = action
 
+    def __repr__(self):
+        return f"created_at={self.created_at} guess_pass={self.guest_pass} description={self.description} " \
+               f"status={self.status} expiration={self.expiration} redeemer={self.redeemer} action={self.action}"
+
 
 class GuestPassFetcher(Fetcher):
     def __init__(self, config: Config, logger: Optional[Logger] = None):
@@ -142,7 +146,6 @@ class GuestPassFetcher(Fetcher):
         row_list = guest_pass_tables[GUEST_PASS_TABLE_INDEX].find_elements_by_tag_name(
             "tr"
         )
-
         # Parse HTML table data.
         for row in row_list:
             cell_list = row.find_elements_by_tag_name("td")
@@ -151,7 +154,6 @@ class GuestPassFetcher(Fetcher):
                 row_entry = Row(*cell_list)
                 if row_entry.status is GuestPassStatus.VALID:
                     valid_guest_passes.append(row_entry.guest_pass)
-                    break
 
         # Close the driver.
         driver.close()
