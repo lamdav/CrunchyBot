@@ -6,8 +6,10 @@ LABEL "com.github.actions.icon"="play-circle"
 LABEL "com.github.actions.color"="yellow"
 
 RUN apk add --no-cache bash
+RUN apk add --no-cache chromium-chromedriver
+RUN apk add --no-cache chromium
 RUN pip install --upgrade pip
-RUN pip install crunchy_bot
+RUN pip install crunchy-bot
 RUN python --version
 RUN pip --version
 RUN crunchy version
