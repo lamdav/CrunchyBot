@@ -58,8 +58,10 @@ class Row(object):
         self.action = action
 
     def __repr__(self):
-        return f"created_at={self.created_at} guess_pass={self.guest_pass} description={self.description} " \
-               f"status={self.status} expiration={self.expiration} redeemer={self.redeemer} action={self.action}"
+        return (
+            f"created_at={self.created_at} guess_pass={self.guest_pass} description={self.description} "
+            f"status={self.status} expiration={self.expiration} redeemer={self.redeemer} action={self.action}"
+        )
 
 
 class GuestPassFetcher(Fetcher):
