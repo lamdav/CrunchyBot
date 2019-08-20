@@ -1,4 +1,4 @@
-![my badge](https://action-badges.now.sh/lamdaV/CrunchyBot?workflow=test)
+[![Actions Status](https://github.com/lamdaV/CrunchyBot/workflows/test%20and%20publish%20on%20tag/badge.svg)](https://github.com/lamdaV/CrunhyBot/actions)
 # CrunchyBot
 ## Description:
 This is a simple bot/script I made to publish my CrunchyRoll Guest Passes to Reddit.
