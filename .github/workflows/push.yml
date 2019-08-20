@@ -4,7 +4,7 @@ jobs:
   black:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: ./.github/actions/checkout@master
     - name: black
       uses: ./actions/black
     - name: pytest
@@ -14,7 +14,7 @@ jobs:
       with:
         args: tag
     - name: pypi
-      uses: ./actions/pypi
+      uses: ./.github/actions/pypi
       env:
         TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
