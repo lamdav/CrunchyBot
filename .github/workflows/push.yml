@@ -4,11 +4,22 @@ jobs:
   black:
     runs-on: ubuntu-latest
     steps:
-    - uses: ./.github/actions/checkout@master
+    - uses: actions/checkout@master
     - name: black
-      uses: ./actions/black
+      uses: ./.github/actions/black
+
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
     - name: pytest
-      uses: ./actions/pytest
+      uses: ./.github/actions/pytest
+
+  pypi:
+    runs-on: ubuntu-latest
+    needs: [black, pytest]
+    steps:
+    - uses: actions/checkout@master
     - name: tag-filter
       uses: actions/bin/filter@master
       with:

@@ -8,7 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: execute
-      uses: ./actions/run
+      uses: ./github/actions/run
       env:
         CRUNCHY_PASSWORD: ${{ secrets.CRUNCHY_PASSWORD }}
         CRUNCHY_USERNAME: ${{ secrets.CRUNCHY_USERNAME }}
