@@ -15,13 +15,15 @@ class JsonConfigParser(ConfigParser):
     def parse(self, path: pathlib.Path) -> Config:
         self.logger.info("Fetching Account Data...")
         posix_path = path.resolve().as_posix()
+
         data_dictionary = {}
-        try:
-            with open(posix_path, "r") as data_file:
-                data_dictionary = json.load(data_file)
-        except FileNotFoundError as e:
-            self.logger.warn(f"Unable to read {posix_path}: {str(e)}")
-            self.logger.info("Attempting to load from environment")
+        if path.exists():
+            try:
+                with open(posix_path, "r") as data_file:
+                    data_dictionary = json.load(data_file)
+            except FileNotFoundError as e:
+                self.logger.warn(f"Unable to read {posix_path}: {str(e)}")
+                self.logger.info("Attempting to load from environment")
 
         crunchy_username = data_dictionary.get(
             "crunchy_username", os.environ.get("CRUNCHY_USERNAME")

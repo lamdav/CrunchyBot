@@ -79,7 +79,7 @@ def init(context):
 @cli.command()
 @click.option(
     "--config",
-    type=click.Path(exists=True),
+    type=click.Path(exists=False),
     default=pathlib.Path.home().joinpath(".crunchybot").as_posix(),
 )
 @click.option("--debug", "-d", type=bool, is_flag=True, default=False)

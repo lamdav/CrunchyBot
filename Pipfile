@@ -4,17 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-praw = "==6.2.0"
+praw = "==6.4.0"
 prawcore = "==1.0.1"
 selenium = "==3.141.0"
 click = "==7.0"
 
 [dev-packages]
-twine = "==1.13.0"
-setuptools = "==41.0.1"
-wheel = "==0.33.4"
-pytest = "==4.6.1"
-black = "==19.3b0"
+twine = "==2.0.0"
+setuptools = "==41.6.1"
+wheel = "==0.33.6"
+pytest = "==5.2.2"
+black = "==19.10b0"
+pylint = "*"
 
 [requires]
 python_version = "3.7.3"
