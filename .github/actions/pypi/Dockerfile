@@ -6,7 +6,8 @@ LABEL "com.github.actions.icon"="upload-cloud"
 LABEL "com.github.actions.color"="yellow"
 
 RUN apk add --no-cache bash
-RUN apk add git
+RUN apk add --no-cache git
+RUN apk add --no-cache build-base
 RUN pip install --upgrade pip
 RUN pip install setuptools wheel twine
 RUN python --version

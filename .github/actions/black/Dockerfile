@@ -6,7 +6,7 @@ LABEL "com.github.actions.icon"="file-text"
 LABEL "com.github.actions.color"="black"
 
 RUN apk add --no-cache bash
-RUN apk add git
+RUN apk add --no-cache git
 RUN pip install --upgrade pip
 RUN pip install black==19.3b0
 RUN python --version
