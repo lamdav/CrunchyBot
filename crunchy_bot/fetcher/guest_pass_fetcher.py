@@ -108,6 +108,7 @@ class GuestPassFetcher(Fetcher):
         chrome_options.add_argument(
             f"--log-path={log_path.joinpath('chrome.log').as_posix()}"
         )
+        chrome_options.add_argument("--remote-debugging-port=9222")
         if not debug:
             chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(options=chrome_options)
