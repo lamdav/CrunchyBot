@@ -5,13 +5,16 @@ LABEL "com.github.actions.description"="publish to pypi"
 LABEL "com.github.actions.icon"="upload-cloud"
 LABEL "com.github.actions.color"="yellow"
 
-RUN apk add --no-cache bash
-RUN apk add --no-cache git
-RUN apk add --no-cache gcc
-RUN apk add --no-cache libffi-dev
+RUN apk add --no-cache \
+  && bash \
+  && git \
+  && gcc \
+  && libffi-dev \
+  && linux-headers \
 
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools wheel twine
+
 RUN python --version
 RUN pip --version
 RUN twine --version
