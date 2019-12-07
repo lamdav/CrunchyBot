@@ -6,7 +6,8 @@ RUN apk add --no-cache \
   gcc \
   libffi-dev \
   linux-headers \
-  musl-dev
+  musl-dev \
+  openssl-dev
 
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools wheel twine
