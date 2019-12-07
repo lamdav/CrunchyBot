@@ -1,10 +1,5 @@
 FROM python:3.7-alpine
 
-LABEL "com.github.actions.name"="pytest"
-LABEL "com.github.actions.description"="execute pytest"
-LABEL "com.github.actions.icon"="upload-cloud"
-LABEL "com.github.actions.color"="yellow"
-
 RUN apk add --no-cache \
   bash \
   git

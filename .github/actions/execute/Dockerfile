@@ -1,10 +1,5 @@
 FROM python:3.7-alpine
 
-LABEL "com.github.actions.name"="execute"
-LABEL "com.github.actions.description"="execute crunchy_bot"
-LABEL "com.github.actions.icon"="play-circle"
-LABEL "com.github.actions.color"="yellow"
-
 RUN apk add --no-cache \
   bash \
   chromium-chromedriver \
