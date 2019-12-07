@@ -12,10 +12,11 @@ selenium = "==3.141.0"
 [dev-packages]
 black = "==19.10b0"
 bump2version = "==0.5.11"
-pytest = "==5.2.2"
-setuptools = "==41.6.1"
-twine = "==2.0.0"
+pytest = "==5.3.1"
+setuptools = "==42.0.2"
+twine = "==3.1.1"
 wheel = "==0.33.6"
+pur = "==5.2.2"
 
 [requires]
 python_version = "3.7.3"
