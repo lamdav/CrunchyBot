@@ -3,7 +3,9 @@ FROM python:3.7-alpine
 RUN apk add --no-cache \
   bash \
   git \
-  gcc
+  gcc \
+  libffi-dev \
+  linux-headers
 
 RUN pip install --upgrade pip
 RUN pip install --upgrade black==19.10b0
