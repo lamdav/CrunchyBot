@@ -10,7 +10,7 @@ RUN apk add --no-cache \
   && git \
   && gcc \
   && libffi-dev \
-  && linux-headers \
+  && linux-headers
 
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools wheel twine
