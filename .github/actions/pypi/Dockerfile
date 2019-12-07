@@ -7,6 +7,9 @@ LABEL "com.github.actions.color"="yellow"
 
 RUN apk add --no-cache bash
 RUN apk add --no-cache git
+RUN apk add --no-cache gcc
+RUN apk add --no-cache libffi-dev
+
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools wheel twine
 RUN python --version
