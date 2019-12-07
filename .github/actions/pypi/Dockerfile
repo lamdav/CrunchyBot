@@ -6,11 +6,11 @@ LABEL "com.github.actions.icon"="upload-cloud"
 LABEL "com.github.actions.color"="yellow"
 
 RUN apk add --no-cache \
-  && bash \
-  && git \
-  && gcc \
-  && libffi-dev \
-  && linux-headers
+  bash \
+  git \
+  gcc \
+  libffi-dev \
+  linux-headers
 
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools wheel twine

@@ -5,11 +5,14 @@ LABEL "com.github.actions.description"="execute crunchy_bot"
 LABEL "com.github.actions.icon"="play-circle"
 LABEL "com.github.actions.color"="yellow"
 
-RUN apk add --no-cache bash
-RUN apk add --no-cache chromium-chromedriver
-RUN apk add --no-cache chromium
+RUN apk add --no-cache \
+  bash \
+  chromium-chromedriver \
+  chromium
+
 RUN pip install --upgrade pip
-RUN pip install crunchy-bot
+RUN pip install --upgrade crunchy-bot
+
 RUN python --version
 RUN pip --version
 RUN crunchy version

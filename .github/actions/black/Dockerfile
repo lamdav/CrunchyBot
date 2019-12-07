@@ -5,10 +5,13 @@ LABEL "com.github.actions.description"="black python formatting check"
 LABEL "com.github.actions.icon"="file-text"
 LABEL "com.github.actions.color"="black"
 
-RUN apk add --no-cache bash
-RUN apk add --no-cache git
+RUN apk add --no-cache \
+  bash \
+  git
+
 RUN pip install --upgrade pip
-RUN pip install black==19.3b0
+RUN pip install --upgrade black==19.10b0
+
 RUN python --version
 RUN pip --version
 
