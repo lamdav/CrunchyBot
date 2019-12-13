@@ -37,7 +37,7 @@ def init(context):
     reddit_username = click.prompt("Reddit Username")
     reddit_user_agent = click.prompt(
         "Reddit User Agent",
-        default=f"CrunchyBot:v4.0.0 (hosted by /u/{reddit_username})",
+        default=f"CrunchyBot:v{v} (hosted by /u/{reddit_username})",
         show_default=True,
     )
     reddit_password = click.prompt("Reddit Password", hide_input=True)
