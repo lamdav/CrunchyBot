@@ -3,7 +3,7 @@
   "crunchy_password": "crunchy_pass",
   "reddit_client_id": "client_id",
   "reddit_client_secret": "client_secret",
-  "reddit_user_agent": "CrunchyBot:v4.4.0 (hosted by /u/{YOUR_USERNAME})",
+  "reddit_user_agent": "CrunchyBot:v4.5.0 (hosted by /u/{YOUR_USERNAME})",
   "reddit_username": "reddit_user",
   "reddit_password": "reddit_pass",
   "log_dir": "/tmp/crunchybot/logs"
