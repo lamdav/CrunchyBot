@@ -1,9 +1,9 @@
 black == 19.10b0
 click == 7.0
-praw == 6.4.0
+praw == 6.5.1
 prawcore == 1.0.1
-pytest == 5.3.1
+pytest == 5.3.5
 selenium == 3.141.0
-setuptools == 42.0.2
+setuptools == 45.2.0
 twine == 3.1.1
-wheel == 0.33.6
+wheel == 0.34.2

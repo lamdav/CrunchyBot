@@ -8,6 +8,7 @@ click = "==7.0"
 praw = "==6.4.0"
 prawcore = "==1.0.1"
 selenium = "==3.141.0"
+pur = "*"
 
 [dev-packages]
 black = "==19.10b0"
