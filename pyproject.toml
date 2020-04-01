@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "crunchybot"
+version = "0.1.0"
+description = "Crunchyroll Guest Pass Publisher for Reddit"
+authors = ["David Lam <david.lam@lamdav.com>"]
+license = "MIT"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: MacOS X",
+  "Intended Audience :: End Users/Desktop",
+  "Topic :: Utilities",
+]
+repository = "https://github.com/lamdav/CrunchyBot"
+readme = "README.md"
+packages = [
+  { include = "crunchy_bot" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+prawcore = "1.0.1"
+selenium = "3.141.0"
+Click = "7.1.1"
+praw = "6.5.1"
+
+[tool.poetry.dev-dependencies]
+black = "^19.10b0"
+pytest = "^5.4.1"
+
+[tools.poetry.urls]
+"Bug Reports" = "https://github.com/lamdav/CrunchyBot/issues"
+
+[tools.poetry.scripts]
+crunchy = "crunchy_bot.client.cli:cli"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
