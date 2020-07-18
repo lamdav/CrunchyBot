@@ -126,12 +126,12 @@ class GuestPassFetcher(Fetcher):
             # Since CloudFlare stalls the login page, this is to wait the estimated
             # 5 seconds (20 seconds to be sure) for CloudFlare to approve of
             # browser.
-            username_field = WebDriverWait(driver, 20).until(
+            username_field = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.ID, "login_form_name"))
             )
             username_field.send_keys(self.config.crunchy_username)
 
-            password_field = WebDriverWait(driver, 20).until(
+            password_field = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.ID, "login_form_password"))
             )
             password_field.send_keys(self.config.crunchy_password)
