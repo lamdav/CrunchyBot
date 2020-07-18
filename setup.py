@@ -30,8 +30,8 @@ setup(
     ],
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     install_requires=[
-        "Click==7.0",
-        "praw==6.4.0",
+        "Click==7.1.1",
+        "praw==6.5.1",
         "prawcore==1.0.1",
         "selenium==3.141.0",
     ],

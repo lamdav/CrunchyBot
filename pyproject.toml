@@ -26,6 +26,7 @@ praw = "6.5.1"
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
 pytest = "^5.4.1"
+bump2version = "^1.0.0"
 
 [tools.poetry.urls]
 "Bug Reports" = "https://github.com/lamdav/CrunchyBot/issues"
