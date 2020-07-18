@@ -116,7 +116,7 @@ def test_fetch(
     options_mock().add_argument.assert_any_call("--headless")
     webdriver_mock.Chrome.assert_any_call(options=options_mock())
     driver_mock.get.assert_any_call("https://www.crunchyroll.com/login?next=%2F")
-    webdriver_wait_mock.assert_any_call(driver_mock, 20)
+    webdriver_wait_mock.assert_any_call(driver_mock, 30)
     # EC does not implement __eq__ or __hash__
     webdriver_wait_mock(driver_mock, 20).until.assert_called()
     webdriver_wait_mock(driver_mock, 20).until(Any).send_keys.assert_any_call(
