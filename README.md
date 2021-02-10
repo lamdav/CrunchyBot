@@ -61,30 +61,29 @@ or save this to `~/.crunchybot`.
 Execute `crunchy publish [--config path/to/.crunchybot] [--debug/-d]` to start scrapping and publishing.
 
 ## Development
-### With Pipenv
-Assuming you have `pipenv` installed on your system, run the following within the repo:
+### With poetry
+Assuming you have `pyenv` and `poetry` installed on your system, run the following within the repo:
+```shell
+pyenv local 3.8 # supports 3.6 - 3.9
+poetry shell
 ```
-$ pipenv --three
-```
-This will setup a virtual environment for Crunchybot to work in without interferring your
+This will set up a virtual environment for Crunchybot to work in without interfering your
 other python projects.
 
-With `pipenv` initialized, run:
+With `poetry` initialized, run:
 ```
-$ pipenv install
+$ poetry install
 ```
-This will use the `Pipfile` and `Pipfile.lock` to fetch and verify dependencies. Run `pipenv shell` to
-execute a shell into the generated virtual environment.
+This will use the `poetry.lock` to fetch and verify dependencies.
 
 ### Without Pipenv
 Install PRAW and Selenium by running the following command:
 ```
-$ pip install -r requirements.txt
+$ pip install -e .
 ```
 
-Once setup with or without `pipenv`, run `pip install -e .` within the repository. This
-should install a local version of `crunchy_bot` and its cli. This will also generate
-a `version.py` using `setuptools_scm`.
+Once setup with or without `poetry`, `crunchy` command line should be available for execution.
+This will also generate a `version.py` using `setuptools_scm`.
 
 Make and test your changes locally. Pull Request are welcome.
 
@@ -104,5 +103,8 @@ Here is a [link](https://blog.netwrix.com/2018/07/03/how-to-automate-powershell-
 to setup the Task Scheduler.
 
 ### Github
+> Note: Crunchyroll or Cloudflare have flagged ip coming from Github
+> Actions CI. So, it's less likely to succeed now.
+
 You can also fork this repository and utilize `Github Actions` to run this task on the first of each month.
 You must add the required data as all cap snake case secret variables.
