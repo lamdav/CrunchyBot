@@ -18,12 +18,12 @@ class RedditPublisher(Publisher):
 
     def _build_comment_text(self, guest_passes: Sequence[str]) -> str:
         """
-            Generates a Reddit formatted text to display the code.
+        Generates a Reddit formatted text to display the code.
 
-            Args:
-                guest_passes:      List of valid guest passes in String form
-            Returns:
-                String that has been formatted for Reddit submission.
+        Args:
+            guest_passes:      List of valid guest passes in String form
+        Returns:
+            String that has been formatted for Reddit submission.
         """
         self.logger.info("Building Comment Text...")
 
@@ -41,12 +41,12 @@ class RedditPublisher(Publisher):
 
     def _reddit_post(self, comment_text: str) -> bool:
         """
-            Post Guest Passes to Reddit on given user account.
+        Post Guest Passes to Reddit on given user account.
 
-            Args:
-                comment_text:    Reddit formatted String to post.
-            Returns:
-                Boolean of completion status.
+        Args:
+            comment_text:    Reddit formatted String to post.
+        Returns:
+            Boolean of completion status.
         """
         # Return boolean.
         submission_status = False

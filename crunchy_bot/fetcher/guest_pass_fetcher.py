@@ -87,12 +87,12 @@ class GuestPassFetcher(Fetcher):
 
     def _crunchy_data_fetch(self, debug=False) -> Sequence[str]:
         """
-            Fetch Guest Passes from given CrunchyRoll Account.
+        Fetch Guest Passes from given CrunchyRoll Account.
 
-            Args:
-                debug:      Boolean used to dictate whether to use ChromeDriver or not.
-            Returns:
-                List of Guest Passes as Strings.
+        Args:
+            debug:      Boolean used to dictate whether to use ChromeDriver or not.
+        Returns:
+            List of Guest Passes as Strings.
         """
         # Constants.
         GUEST_PASS_TABLE_INDEX = 0

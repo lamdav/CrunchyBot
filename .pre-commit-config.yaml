@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
+    rev: v3.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -8,6 +8,11 @@ repos:
       - id: check-yaml
       - id: requirements-txt-fixer
   - repo: https://github.com/psf/black
-    rev: 19.10b0
+    rev: 20.8b1
     hooks:
       - id: black
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.14.2
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
